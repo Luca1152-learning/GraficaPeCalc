@@ -1,123 +1,95 @@
-// Codul sursa este adaptat dupa OpenGLBook.com
+#include <windows.h>
+#include <gl/freeglut.h>
 
-#include <windows.h>  // biblioteci care urmeaza sa fie incluse
-#include <stdlib.h> // necesare pentru citirea shader-elor
-#include <stdio.h>
-#include <GL/glew.h> // glew apare inainte de freeglut
-#include <GL/freeglut.h> // nu trebuie uitat freeglut.h
-#include "loadShaders.h"
-
-
-//////////////////////////////////////
-
-GLuint
-VaoId,
-VboId,
-ColorBufferId,
-ProgramId;
-
-
-void CreateVBO(void)
+void init(void)  // initializare fereastra de vizualizare
 {
-	// varfurile 
-	GLfloat Vertices[] = {
-		0.5f,  0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		0.5f,  0.5f, 0.0f, 1.0f
-	};
+	glClearColor(1.0, 1.0, 1.0, 0.0); // precizeaza culoarea de fond a ferestrei de vizualizare
 
-	// culorile, ca atribute ale varfurilor
-	GLfloat Colors[] = {
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	};
+	glMatrixMode(GL_PROJECTION);  // se precizeaza este vorba de o reprezentare 2D, realizata prin proiectie ortogonala
+	gluOrtho2D(0, 800.0, 0.0, 700.0); // sunt indicate coordonatele extreme ale ferestrei de vizualizare
+}
 
-	// se creeaza un buffer nou
-	glGenBuffers(1, &VboId);
-	// este setat ca buffer curent
-	glBindBuffer(GL_ARRAY_BUFFER, VboId);
-	// varfurile sunt "copiate" in bufferul curent
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+void desen(void) // procedura desenare  
+{
+	// dreptunghi: desenare directa
+	glColor3f(0.0, 0.0, 1.0);
+	glRecti(20, 130, 140, 310);
 
-	// se creeaza / se leaga un VAO (Vertex Array Object) - util cand se utilizeaza mai multe VBO
-	glGenVertexArrays(1, &VaoId);
-	glBindVertexArray(VaoId);
-	// se activeaza lucrul cu atribute; atributul 0 = pozitie
-	glEnableVertexAttribArray(0);
+
+	//poligon convex
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+	glVertex2i(0, 0);
+	glVertex2i(100, 10);
+	glVertex2i(200, 120);
+	glVertex2i(155, 290);
+	glEnd();
+
+
+
+
+	// evantai de triunghiuri
+	glColor3d(1.0, 0.0, 0.25);
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2i(250, 300);
+	glVertex2i(50, 300);
+	glVertex2i(200, 350);
+	glVertex2i(250, 500);
+	glVertex2i(350, 200);
+	glEnd();
+
+	// reuniune de triunghiuri
+	glColor3d(1.0, 0.75, 0.25);
+	glBegin(GL_TRIANGLE_STRIP);
+	glVertex2i(650, 300);
+	glVertex2i(450, 300);
+	glVertex2i(600, 350);
+	glVertex2i(650, 500);
+	glVertex2i(750, 200);
+	glEnd();
+
+	glFlush(); // proceseaza procedurile OpenGL cat mai rapid
+}
+
+void desen2(void)
+{
+
+	glColor3f(1, 0, 0);
+	glRecti(-30, 20, 40, 10);
 	// 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glColor3f(1, 1, 0);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glTranslatef(-10.0, -20.0, 0.0);
+	glScalef(0.5, 2.0, 0.0);
+	glRecti(-30, 20, 40, 10);
+	glPopMatrix();
 
-	// un nou buffer, pentru culoare
-	glGenBuffers(1, &ColorBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Colors), Colors, GL_STATIC_DRAW);
-	// atributul 1 =  culoare
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
-}
-void DestroyVBO(void)
-{
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
+	glPointSize(4.0);
+	glColor3f(0, 0, 0);
+	glBegin(GL_POINTS);
+	glVertex3f(40, 20, 0);
+	glEnd();
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDeleteBuffers(1, &ColorBufferId);
-	glDeleteBuffers(1, &VboId);
-
-	glBindVertexArray(0);
-	glDeleteVertexArrays(1, &VaoId);
-}
-
-void CreateShaders(void)
-{
-	ProgramId = LoadShaders("example.vert", "example.frag");
-	glUseProgram(ProgramId);
-}
-void DestroyShaders(void)
-{
-	glDeleteProgram(ProgramId);
-}
-
-void Initialize(void)
-{
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // culoarea de fond a ecranului
-	CreateVBO();
-	CreateShaders();
-}
-void RenderFunction(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT);       
-
-	// Functiile de desenare
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDrawArrays(GL_TRIANGLES, 3, 3);
+	glPointSize(8.0);
+	glColor3f(0, 0, 0);
+	glBegin(GL_POINTS);
+	glVertex3f(10, 20, 0);
+	glEnd();
 
 	glFlush();
-}
-void Cleanup(void)
-{
-	DestroyShaders();
-	DestroyVBO();
-}
 
-int main(int argc, char* argv[])
-{
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-	glutInitWindowPosition(100, 100); // pozitia initiala a ferestrei
-	glutInitWindowSize(600, 600); //dimensiunile ferestrei
-	glutCreateWindow("Grafica pe calculator - primul exemplu"); // titlul ferestrei
-	glewInit(); // nu uitati de initializare glew; trebuie initializat inainte de a a initializa desenarea
-	Initialize();
-	glutDisplayFunc(RenderFunction);
-	glutCloseFunc(Cleanup);
-	glutMainLoop();
 }
+void main(int argc, char** argv)
+{
+	glutInit(&argc, argv); // initializare GLUT
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // se utilizeaza un singur buffer | modul de colorare RedGreenBlue (= default)
+	glutInitWindowPosition(100, 100); // pozitia initiala a ferestrei de vizualizare (in coordonate ecran)
+	glutInitWindowSize(800, 600); // dimensiunile ferestrei 
+	glutCreateWindow("Poligoane"); // creeaza fereastra, indicand numele ferestrei de vizualizare - apare in partea superioara
 
+	init(); // executa procedura de initializare
+	glClear(GL_COLOR_BUFFER_BIT); // reprezentare si colorare fereastra de vizualizare
+	glutDisplayFunc(desen); // procedura desen este invocata ori de cate ori este nevoie
+	glutMainLoop(); // ultima instructiune a programului, asteapta (eventuale) noi date de intrare
+}
