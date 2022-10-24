@@ -59,9 +59,9 @@ void CreateVBO(void)
 
     // culorile, ca atribute ale varfurilor
     GLfloat Colors[] = {
-      1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 0.0f, 1.0f,
-      0.0f, 0.0f, 1.0f, 1.0f
+      1.0f, 1.0f, 0.0f, 1.0f,
+      0.0f, 1.0f, 1.0f, 1.0f,
+      1.0f, 0.0f, 1.0f, 1.0f
     };
 
 
@@ -164,8 +164,8 @@ int main(int argc, char* argv[])
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowPosition(100, 100); // pozitia initiala a ferestrei
-    glutInitWindowSize(700, 500); //dimensiunile ferestrei
+    glutInitWindowPosition(400, 400); // pozitia initiala a ferestrei
+    glutInitWindowSize(400, 400); //dimensiunile ferestrei
     glutCreateWindow("Primul triunghi - OpenGL <<nou>>"); // titlul ferestrei
     glewInit(); // nu uitati de initializare glew; trebuie initializat inainte de a a initializa desenarea
     Initialize();
