@@ -5,7 +5,7 @@
  * Modified for GLFW by Sylvain Hellegouarch - sh@programmationworld.com
  * Modified for variable frame rate by Marcus Geelnard
  * 2003-Jan-31: Minor cleanups and speedups / MG
- * 2010-10-24: Formatting and cleanup - Camilla Löwy
+ * 2010-10-24: Formatting and cleanUp - Camilla Löwy
  *****************************************************************************/
 
 #if defined(_MSC_VER)
@@ -63,7 +63,7 @@ struct Vertex vertex[VERTEXNUM];
  */
 
 //========================================================================
-// Initialize grid geometry
+// initialize grid geometry
 //========================================================================
 
 void init_vertices(void)
@@ -111,7 +111,7 @@ double vx[GRIDW][GRIDH], vy[GRIDW][GRIDH];
 double ax[GRIDW][GRIDH], ay[GRIDW][GRIDH];
 
 //========================================================================
-// Initialize grid
+// initialize grid
 //========================================================================
 
 void init_grid(void)
@@ -167,7 +167,7 @@ void draw_scene(GLFWwindow* window)
 
 
 //========================================================================
-// Initialize Miscellaneous OpenGL state
+// initialize Miscellaneous OpenGL state
 //========================================================================
 
 void init_opengl(void)
@@ -418,15 +418,15 @@ int main(int argc, char* argv[])
     glfwGetFramebufferSize(window, &width, &height);
     framebuffer_size_callback(window, width, height);
 
-    // Initialize OpenGL
+    // initialize OpenGL
     init_opengl();
 
-    // Initialize simulation
+    // initialize simulation
     init_vertices();
     init_grid();
     adjust_grid();
 
-    // Initialize timer
+    // initialize timer
     t_old = glfwGetTime() - 0.01;
 
     while (!glfwWindowShouldClose(window))

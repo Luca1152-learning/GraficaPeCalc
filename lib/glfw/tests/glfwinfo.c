@@ -404,7 +404,7 @@ int main(int argc, char** argv)
         { NULL, 0, NULL, 0 }
     };
 
-    // Initialize GLFW and create window
+    // initialize GLFW and create window
 
     if (!valid_version())
         exit(EXIT_FAILURE);

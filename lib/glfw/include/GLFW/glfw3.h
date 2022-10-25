@@ -639,7 +639,7 @@ extern "C" {
  *  This occurs if a GLFW function was called that must not be called unless the
  *  library is [initialized](@ref intro_init).
  *
- *  @analysis Application programmer error.  Initialize GLFW before calling any
+ *  @analysis Application programmer error.  initialize GLFW before calling any
  *  function that requires initialization.
  */
 #define GLFW_NOT_INITIALIZED        0x00010001
@@ -5511,7 +5511,7 @@ GLFWAPI VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window
 
 
 /*************************************************************************
- * Global definition cleanup
+ * Global definition cleanUp
  *************************************************************************/
 
 /* ------------------- BEGIN SYSTEM/COMPILER SPECIFIC -------------------- */

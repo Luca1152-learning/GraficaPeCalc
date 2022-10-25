@@ -237,7 +237,7 @@ static void usage(void)
 
 
 //========================================================================
-// Initialize a new particle
+// initialize a new particle
 //========================================================================
 
 static void init_particle(PARTICLE *p, double t)
