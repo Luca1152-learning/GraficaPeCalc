@@ -88,6 +88,16 @@ void mouse(int button, int state, int x, int y) {
 void CreateVBO(void) {
     // varfurile
     GLfloat Vertices[] = {
+            // Fundal
+            // Triunghiul 1
+            0.0f, 0.0f, 0.0f, 1.0f,
+            400.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 400.0f, 0.0f, 1.0f,
+            // Triunghiul 2
+            400.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 400.0f, 0.0f, 1.0f,
+            400.0f, 400.0f, 0.0f, 1.0f,
+
             // Varfuri pentru poligonul convex
             // Triunghiul 1
             50.0f, 150.0f, 0.0f, 1.0f,
@@ -110,6 +120,14 @@ void CreateVBO(void) {
 
     // culorile varfurilor din colturi
     GLfloat Colors[] = {
+            // Fundal gradient
+            1.0f, 1.0f, 1.0f, 1.0f,
+            0.81f, 0.82f, 0.85f, 1.0f,
+            0.81f, 0.82f, 0.85f, 1.0f,
+            0.81f, 0.82f, 0.85f, 1.0f,
+            0.81f, 0.82f, 0.85f, 1.0f,
+            0.32f, 0.59f, 0.8f, 1.0f,
+
             // Poligon convex
             1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
@@ -197,7 +215,7 @@ void RenderFunction(void) {
     glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
     glUniform1i(codColLocation, codCol);
     // Apelare DrawArrays
-    glDrawArrays(GL_TRIANGLES, 0, 12);
+    glDrawArrays(GL_TRIANGLES, 0, 18);
 
 //    // Matricea pentru dreptunghiul albastru
 //    myMatrix = resizeMatrix * matrTransl * matrScale1;
