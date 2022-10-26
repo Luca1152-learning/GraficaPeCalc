@@ -22,12 +22,12 @@ void CreateVBO(void)
 {
     // varfurile
     GLfloat Vertices[] = {
-            -0.2f, -0.2f, 0.0f, 1.0f, // jos stanga
-            0.0f,  0.2f, 0.0f, 1.0f, // sus
-            0.2f, -0.2f, 0.0f, 1.0f, // jos dreapta
-            -0.8f, -0.6f, 0.0f, 1.0f, // jos stanga
-            0.8f, -0.6f, 0.0f, 1.0f, // jos dreapta
-            0.0f,  0.8f, 0.0f, 1.0f // sus
+            -0.8f, -0.5f, 0.0f, 1.0f,
+            -0.8f, 0.5f, 0.0f, 1.0f,
+            -0.2f, -0.5f, 0.0f, 1.0f,
+            0.0f, -0.5f, 0.0f, 1.0f,
+            0.0f, 0.5f, 0.0f, 1.0f,
+            0.6f, -0.5f, 0.0f, 1.0f,
     };
 
     // culorile, ca atribute ale varfurilor
