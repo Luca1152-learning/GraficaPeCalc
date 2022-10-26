@@ -20,15 +20,17 @@ int codCol;
 
 void CreateVBO(void)
 {
-    // varfurile
     GLfloat Vertices[] = {
-            -0.8f, -0.5f, 0.0f, 1.0f,
-            -0.8f, 0.5f, 0.0f, 1.0f,
-            -0.2f, -0.5f, 0.0f, 1.0f,
-            0.0f, -0.5f, 0.0f, 1.0f,
-            0.0f, 0.5f, 0.0f, 1.0f,
-            0.6f, -0.5f, 0.0f, 1.0f,
+            // Counter-clock wise
+            -0.8f, -0.5f, 0.0f, 1.0f, // stanga jos
+            -0.2f, -0.5f, 0.0f, 1.0f, // dreapta
+            -0.8f, 0.5f, 0.0f, 1.0f, // stanga sus
+            // Clock wise
+            0.0f, -0.5f, 0.0f, 1.0f, // stanga jos
+            0.0f, 0.5f, 0.0f, 1.0f, // stanga sus
+            0.6f, -0.5f, 0.0f, 1.0f, // dreapta
     };
+    // varfurile
 
     // culorile, ca atribute ale varfurilor
     GLfloat Colors[] = {
@@ -98,21 +100,21 @@ void RenderFunction(void)
     glClear(GL_COLOR_BUFFER_BIT);
     glLineWidth(8.0);
 
-    glPolygonMode(GL_FRONT, GL_LINE);
+    glPolygonMode(GL_BACK, GL_LINE);
     // Modificare 1: schimbare fata poligonului
     // Modificare 2: executate randurile de mai jos; testate si GL_FRONT, GL_FRONT_AND_BACK
-    // glEnable (GL_CULL_FACE); // cull face
-    // glCullFace (GL_BACK);
+//     glEnable (GL_CULL_FACE); // cull face
+//     glCullFace (GL_BACK);
     // Modificare 3: executat randul de mai jos, combinate modificarile 2 si 3
-    // glFrontFace(GL_CW);
+//     glFrontFace(GL_CW);
     codColLocation = glGetUniformLocation(ProgramId, "codCol");
 
-    // Triunghiul "mic"
+    // Triunghiul vazut din fata
     codCol = 0;
     glUniform1i(codColLocation, codCol);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    // Triunghiul "mare"
+    // Triunghiul vazut din spate
     codCol = 1;
     glUniform1i(codColLocation, codCol);
     glDrawArrays(GL_TRIANGLES, 3, 3);
