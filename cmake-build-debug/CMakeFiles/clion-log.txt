@@ -27,6 +27,11 @@ CMake Deprecation Warning at lib/glm/CMakeLists.txt:2 (cmake_policy):
 
 
 -- GLM is a header only library, no need to build it. Set the option GLM_TEST_ENABLE with ON to build and run the test bench
--- Configuring done
--- Generating done
--- Build files have been written to: C:/Users/tluca/Desktop/GC/cmake-build-debug
+CMake Error at CMakeLists.txt:53 (target_compile_definitions):
+  Cannot specify compile definitions for target "project" which is not built
+  by this project.
+
+
+-- Configuring incomplete, errors occurred!
+See also "C:/Users/tluca/Desktop/GC/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "C:/Users/tluca/Desktop/GC/cmake-build-debug/CMakeFiles/CMakeError.log".

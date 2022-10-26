@@ -1,0 +1,611 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5,
+						6
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						3
+					]
+				},
+				{
+					"build" : "lib/glfw",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-lib.glfw-Debug-61d4166ec73e38142514.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "lib/glfw",
+					"targetIndexes" : 
+					[
+						34
+					]
+				},
+				{
+					"build" : "lib/glfw/src",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-lib.glfw.src-Debug-ff146fab37dd88105332.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "lib/glfw/src",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "lib/glfw/examples",
+					"jsonFile" : "directory-lib.glfw.examples-Debug-52141caef7df68b819ab.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "lib/glfw/examples",
+					"targetIndexes" : 
+					[
+						1,
+						8,
+						12,
+						23,
+						25,
+						27,
+						28,
+						29,
+						35
+					]
+				},
+				{
+					"build" : "lib/glfw/tests",
+					"jsonFile" : "directory-lib.glfw.tests-Debug-00ddc9cadfc55b95349a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "lib/glfw/tests",
+					"targetIndexes" : 
+					[
+						2,
+						4,
+						5,
+						6,
+						7,
+						10,
+						13,
+						14,
+						15,
+						16,
+						21,
+						22,
+						24,
+						26,
+						30,
+						31,
+						32,
+						33,
+						36
+					]
+				},
+				{
+					"build" : "lib/glew",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-lib.glew-Debug-57638f006a101e1a98f4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "lib/glew",
+					"targetIndexes" : 
+					[
+						17,
+						18,
+						19,
+						20
+					]
+				},
+				{
+					"build" : "lib/glm",
+					"childIndexes" : 
+					[
+						7,
+						8
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-lib.glm-Debug-e052b5cde52254af24b4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "lib/glm"
+				},
+				{
+					"build" : "lib/glm/glm",
+					"jsonFile" : "directory-lib.glm.glm-Debug-7e44bcf2243f8c247ecb.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 6,
+					"projectIndex" : 3,
+					"source" : "lib/glm/glm",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "lib/glm/test",
+					"childIndexes" : 
+					[
+						9,
+						10,
+						11,
+						12
+					],
+					"jsonFile" : "directory-lib.glm.test-Debug-751c548c576d769c79e0.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 6,
+					"projectIndex" : 3,
+					"source" : "lib/glm/test"
+				},
+				{
+					"build" : "lib/glm/test/bug",
+					"jsonFile" : "directory-lib.glm.test.bug-Debug-d1bd37800b311f38477e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 8,
+					"projectIndex" : 3,
+					"source" : "lib/glm/test/bug"
+				},
+				{
+					"build" : "lib/glm/test/core",
+					"jsonFile" : "directory-lib.glm.test.core-Debug-0b9434b2e2c390b784ee.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 8,
+					"projectIndex" : 3,
+					"source" : "lib/glm/test/core"
+				},
+				{
+					"build" : "lib/glm/test/gtc",
+					"jsonFile" : "directory-lib.glm.test.gtc-Debug-9ddbaacca42632de6622.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 8,
+					"projectIndex" : 3,
+					"source" : "lib/glm/test/gtc"
+				},
+				{
+					"build" : "lib/glm/test/gtx",
+					"jsonFile" : "directory-lib.glm.test.gtx-Debug-332bb998d05c7c44d07a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 8,
+					"projectIndex" : 3,
+					"source" : "lib/glm/test/gtx"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "GC",
+					"targetIndexes" : 
+					[
+						0,
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"name" : "GLFW",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						12,
+						13,
+						14,
+						15,
+						16,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						30,
+						31,
+						32,
+						33,
+						34,
+						35,
+						36
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "glew",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						17,
+						18,
+						19,
+						20
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					],
+					"name" : "glm",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						11
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "GC::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-GC-Debug-a2f6a74f1a5058f49bbf.json",
+					"name" : "GC",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "boing::@b5705d2630751f584e5f",
+					"jsonFile" : "target-boing-Debug-a3839cd9736c2edec922.json",
+					"name" : "boing",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "clipboard::@7d17247f136556186bbb",
+					"jsonFile" : "target-clipboard-Debug-92ba05eb91948d9f4a33.json",
+					"name" : "clipboard",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "copy-files::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-copy-files-Debug-214d0e6acfe5d0ba6b1c.json",
+					"name" : "copy-files",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "cursor::@7d17247f136556186bbb",
+					"jsonFile" : "target-cursor-Debug-cc58445c8145793594dc.json",
+					"name" : "cursor",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "empty::@7d17247f136556186bbb",
+					"jsonFile" : "target-empty-Debug-8d6d1f05f6311a0f06e9.json",
+					"name" : "empty",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "events::@7d17247f136556186bbb",
+					"jsonFile" : "target-events-Debug-154047da42bcf8f39d1f.json",
+					"name" : "events",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "gamma::@7d17247f136556186bbb",
+					"jsonFile" : "target-gamma-Debug-bfaaad79fa2ae833850d.json",
+					"name" : "gamma",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "gears::@b5705d2630751f584e5f",
+					"jsonFile" : "target-gears-Debug-bc4cf0a5a6405cb91eac.json",
+					"name" : "gears",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "glfw::@17f284a5fc0809a54549",
+					"jsonFile" : "target-glfw-Debug-1ecf707ed773933e8362.json",
+					"name" : "glfw",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "glfwinfo::@7d17247f136556186bbb",
+					"jsonFile" : "target-glfwinfo-Debug-2c9be3b1c16c5eb28200.json",
+					"name" : "glfwinfo",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "glm_dummy::@ff40cfcfb06a0006160e",
+					"jsonFile" : "target-glm_dummy-Debug-94209da5b767733ff778.json",
+					"name" : "glm_dummy",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "heightmap::@b5705d2630751f584e5f",
+					"jsonFile" : "target-heightmap-Debug-ef81fa17353e327b4bb5.json",
+					"name" : "heightmap",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "icon::@7d17247f136556186bbb",
+					"jsonFile" : "target-icon-Debug-4581ad850cb01ac0fa4f.json",
+					"name" : "icon",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "iconify::@7d17247f136556186bbb",
+					"jsonFile" : "target-iconify-Debug-d5f61360b2ef117e0df1.json",
+					"name" : "iconify",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "inputlag::@7d17247f136556186bbb",
+					"jsonFile" : "target-inputlag-Debug-92f6963c897965cc3012.json",
+					"name" : "inputlag",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "joysticks::@7d17247f136556186bbb",
+					"jsonFile" : "target-joysticks-Debug-ce89cce7d1081ae8da12.json",
+					"name" : "joysticks",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "libglew_shared::@f404f1a77aed5dbbeead",
+					"jsonFile" : "target-libglew_shared-Debug-63af82fd733ec8cfa99a.json",
+					"name" : "libglew_shared",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "libglew_static::@f404f1a77aed5dbbeead",
+					"jsonFile" : "target-libglew_static-Debug-14fe35223e6d26592a39.json",
+					"name" : "libglew_static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "libglewmx_shared::@f404f1a77aed5dbbeead",
+					"jsonFile" : "target-libglewmx_shared-Debug-677f55dd3e70aacda974.json",
+					"name" : "libglewmx_shared",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "libglewmx_static::@f404f1a77aed5dbbeead",
+					"jsonFile" : "target-libglewmx_static-Debug-8bc93a402ba3e63aa04e.json",
+					"name" : "libglewmx_static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "monitors::@7d17247f136556186bbb",
+					"jsonFile" : "target-monitors-Debug-c1d6603a7f0ae72face3.json",
+					"name" : "monitors",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "msaa::@7d17247f136556186bbb",
+					"jsonFile" : "target-msaa-Debug-82ce89d773bf03ce6e27.json",
+					"name" : "msaa",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "offscreen::@b5705d2630751f584e5f",
+					"jsonFile" : "target-offscreen-Debug-a83d37d2256f89c7422b.json",
+					"name" : "offscreen",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "opacity::@7d17247f136556186bbb",
+					"jsonFile" : "target-opacity-Debug-3f811fe2abfe3804e8ed.json",
+					"name" : "opacity",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "particles::@b5705d2630751f584e5f",
+					"jsonFile" : "target-particles-Debug-e95c96fcafcf8a52b299.json",
+					"name" : "particles",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "reopen::@7d17247f136556186bbb",
+					"jsonFile" : "target-reopen-Debug-1f598f03842f4fc2e393.json",
+					"name" : "reopen",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "sharing::@b5705d2630751f584e5f",
+					"jsonFile" : "target-sharing-Debug-349bb9a610cdd00ae807.json",
+					"name" : "sharing",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "simple::@b5705d2630751f584e5f",
+					"jsonFile" : "target-simple-Debug-b47f1a9543855c9b5a0a.json",
+					"name" : "simple",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "splitview::@b5705d2630751f584e5f",
+					"jsonFile" : "target-splitview-Debug-cd8c02e82e6b7152c3e6.json",
+					"name" : "splitview",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "tearing::@7d17247f136556186bbb",
+					"jsonFile" : "target-tearing-Debug-78b81336f695a119e54f.json",
+					"name" : "tearing",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "threads::@7d17247f136556186bbb",
+					"jsonFile" : "target-threads-Debug-d480e3d2a2ea15848f5a.json",
+					"name" : "threads",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "timeout::@7d17247f136556186bbb",
+					"jsonFile" : "target-timeout-Debug-d7ac9612e46cad16fc65.json",
+					"name" : "timeout",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "title::@7d17247f136556186bbb",
+					"jsonFile" : "target-title-Debug-0fcf72256d3d14edb731.json",
+					"name" : "title",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@a7a2f639778f88e1b46d",
+					"jsonFile" : "target-uninstall-Debug-1b17acf480f72f63679a.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "wave::@b5705d2630751f584e5f",
+					"jsonFile" : "target-wave-Debug-b374e2c00bfa88c4d8b7.json",
+					"name" : "wave",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "windows::@7d17247f136556186bbb",
+					"jsonFile" : "target-windows-Debug-7060c55990e78d81685e.json",
+					"name" : "windows",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/tluca/Desktop/GC/cmake-build-debug",
+		"source" : "C:/Users/tluca/Desktop/GC"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
