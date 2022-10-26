@@ -75,4 +75,10 @@ crashlytics-build.properties
 fabric.properties
 
 # Build
-cmake-build-debug/
+cmake-build-debug/.cmake
+cmake-build-debug/CMakeFiles
+cmake-build-debug/Testing
+cmake-build-debug/lib
+.ninja_deps
+.ninja_log
+build.ninja
