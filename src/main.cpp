@@ -37,7 +37,8 @@ float tx = 0;
 float ty = 0;
 float i = 0.0, alpha = 0.0, step = 0.3, beta = 0.002;
 glm::mat4
-        myMatrix, resizeMatrix, matrTransl, matrScale1, matrScale2, matrRot, matrDepl;
+        myMatrix, resizeMatrix, matrTransl1, matrTransl2, matrTransl3, matrScale1, matrScale2, matrRot, matrDepl;
+glm::vec3 center;
 
 void displayMatrix() {
     for (int ii = 0; ii < 4; ii++) {
@@ -198,44 +199,27 @@ void Initialize(void) {
 void RenderFunction(void) {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // TO DO: schimbati transformarile (de exemplu deplasarea are loc pe axa Oy sau pe o alta dreapta)
     resizeMatrix = glm::ortho(0.0f, 400.0f, 0.0f,400.0f); // scalam, "aducem" scena la "patratul standard" [-1,1]x[-1,1]
-    matrTransl = glm::translate(glm::mat4(1.0f), glm::vec3(i, 0.0, 0.0)); // controleaza translatia de-a lungul lui Ox
-    matrDepl = glm::translate(glm::mat4(1.0f), glm::vec3(0, 80.0, 0.0)); // plaseaza patratul rosu
-    matrScale1 = glm::scale(glm::mat4(1.0f), glm::vec3(1.1, 0.3, 0.0)); // folosita la desenarea dreptunghiului albastru
-    matrScale2 = glm::scale(glm::mat4(1.0f), glm::vec3(0.25, 0.25, 0.0)); // folosita la desenarea patratului rosu
-    matrRot = glm::rotate(glm::mat4(1.0f), angle,
-                          glm::vec3(0.0, 0.0, 1.0)); // rotatie folosita la deplasarea patratului rosu
 
-    // Matricea de redimensionare (pentru elementele "fixe")
+    // Fara transformari
     myMatrix = resizeMatrix;
-    // Culoarea
     codCol = 0;
-    // Transmitere variabile uniforme
     glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
     glUniform1i(codColLocation, codCol);
-    // Apelare DrawArrays
     glDrawArrays(GL_TRIANGLES, 0, 18);
 
-//    // Matricea pentru dreptunghiul albastru
-//    myMatrix = resizeMatrix * matrTransl * matrScale1;
-//    // Culoarea
-//    codCol = 1;
-//    // Transmitere variabile uniforme
-//    glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
-//    glUniform1i(codColLocation, codCol);
-//    // Apelare DrawArrays
-//    glDrawArrays(GL_POLYGON, 4, 4);
-//
-//    // Matricea pentru dreptunghiul rosu
-//    myMatrix = resizeMatrix * matrTransl * matrRot * matrDepl * matrScale2;
-//    // Culoarea
-//    codCol = 2;
-//    // Transmitere variabile uniforme
-//    glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
-//    glUniform1i(codColLocation, codCol);
-//    // Apelare DrawArrays
-//    glDrawArrays(GL_POLYGON, 4, 4);
+    // Cu transformari
+    center = glm::vec3(150.0, 200.0, 0.0); // Centrul pentru cele doua poligoane
+    matrTransl1 = glm::translate(glm::mat4(1.0f), -center); // Translatie catre origine a punctului
+    matrRot = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotatie in jurul originii, de 180 de grade
+    matrTransl2 = glm::translate(glm::mat4(1.0f), center); // Translate inapoi catre centru
+    matrTransl3 = glm::translate(glm::mat4(1.0f), glm::vec3(000.0f, -125.0f, 0.0f)); // Translate cu 125 mai jos
+    myMatrix = resizeMatrix * matrTransl3 * matrTransl2 * matrRot * matrTransl1;
+
+    codCol = 0;
+    glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+    glUniform1i(codColLocation, codCol);
+    glDrawArrays(GL_TRIANGLES, 6, 18);
 
     glutSwapBuffers();
     glFlush();
