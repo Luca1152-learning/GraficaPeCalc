@@ -13,6 +13,8 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Shader.hpp
         src/Shader.cpp
+        src/loadShaders.h
+        src/loadShaders.cpp
         )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
