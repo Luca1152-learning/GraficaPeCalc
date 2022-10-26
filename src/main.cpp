@@ -3,6 +3,9 @@
 #include <windows.h>  // biblioteci care urmeaza sa fie incluse
 #include <stdlib.h> // necesare pentru citirea shader-elor
 #include <stdio.h>
+#include <cstdlib>
+#include <iostream>
+#include <time.h>
 #include <GL/glew.h> // glew apare inainte de freeglut
 #include <GL/freeglut.h> // nu trebuie uitat freeglut.h
 #include "loadShaders.h"
@@ -14,7 +17,7 @@ GLuint
         VboId,
         ColorBufferId,
         ProgramId,
-        codColLocation;
+        codColLocation, codRedLocation, codGreenLocation, codBlueLocation;
 
 int codCol;
 
@@ -97,6 +100,10 @@ void RenderFunction(void)
 
     // Variabilele uniforme sunt folosite pentru a "comunica" cu shader-ele
     codColLocation = glGetUniformLocation(ProgramId, "codCol");
+    codRedLocation = glGetUniformLocation(ProgramId, "red");
+    codGreenLocation = glGetUniformLocation(ProgramId, "green");
+    codBlueLocation = glGetUniformLocation(ProgramId, "blue");
+
     codCol = 0;
     glUniform1i(codColLocation, codCol);
     // Desenarea segmentelor folosind modelul Gouraud (Gouraud shading)
@@ -107,16 +114,17 @@ void RenderFunction(void)
     codCol = 1;
     glUniform1i(codColLocation, codCol);
     // Punctele cu o singura culoare
+    // Culoare aleatorie:
+    float red = ((float) rand() / RAND_MAX);
+    float green = ((float) rand() / RAND_MAX);
+    float blue = ((float) rand() / RAND_MAX);
+    std::cout << red << " " << green << " " << blue;
+    glUniform1f(codRedLocation, red);
+    glUniform1f(codGreenLocation, green);
+    glUniform1f(codBlueLocation, blue);
+
     glEnable(GL_POINT_SMOOTH);
     glPointSize(20.0);
-    glDrawArrays(GL_POINTS, 0, 6);
-    glDisable(GL_POINT_SMOOTH);
-
-    codCol = 2;
-    glUniform1i(codColLocation, codCol);
-    // Punctele cu o singura culoare
-    glEnable(GL_POINT_SMOOTH);
-    glPointSize(10.0);
     glDrawArrays(GL_POINTS, 0, 6);
     glDisable(GL_POINT_SMOOTH);
 
@@ -130,6 +138,8 @@ void Cleanup(void)
 
 int main(int argc, char* argv[])
 {
+    srand(time(0));
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowPosition(100, 100); // pozitia initiala a ferestrei

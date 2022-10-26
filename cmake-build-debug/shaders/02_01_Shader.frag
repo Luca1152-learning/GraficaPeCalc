@@ -4,19 +4,16 @@
 in vec4 ex_Color;
 out vec4 out_Color;
 uniform int codCol;
+uniform float red;
+uniform float green;
+uniform float blue;
 
 void main(void)
 {
-    switch (codCol){
-        case 0:
-            out_Color = ex_Color;
-            break;
-        case 1:
-            out_Color = vec4(1.0, 0.0, 0.0, 0.0);
-            break;
-        case 2:
-            out_Color = vec4(0.0, 1.0, 0.0, 0.0);
-            break;
+    if (codCol==0){
+        out_Color = ex_Color;
+    } else {
+        out_Color = vec4(red, green, blue, 0.0);
     }
 }
  
