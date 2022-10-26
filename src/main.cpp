@@ -39,7 +39,7 @@ void initialize() {
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 }
 
-void drawRGBCube() {
+void drawDate() {
     GLfloat vertices[] = {
             // 2
             -0.8f, 0.2f,
@@ -108,7 +108,7 @@ void drawRGBCube() {
 }
 
 void createVBO() {
-    drawRGBCube();
+    drawDate();
 }
 
 void createShaders() {
@@ -162,7 +162,7 @@ int main(int argc, char **argv) {
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("Cub RGB");
+    glutCreateWindow("Data");
     glewInit();
 
     initialize();
