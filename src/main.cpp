@@ -35,7 +35,6 @@ int codCol;
 float PI = 3.141592, angle = 0;
 float tx = 0;
 float ty = 0;
-float width = 450, height = 300;
 float i = 0.0, alpha = 0.0, step = 0.3, beta = 0.002;
 glm::mat4
         myMatrix, resizeMatrix, matrTransl, matrScale1, matrScale2, matrRot, matrDepl;
@@ -89,24 +88,43 @@ void mouse(int button, int state, int x, int y) {
 void CreateVBO(void) {
     // varfurile
     GLfloat Vertices[] = {
-            // varfuri pentru axe
-            -450.0f, 0.0f, 0.0f, 1.0f,
-            450.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, -300.0f, 0.0f, 1.0f,
-            0.0f, 300.0f, 0.0f, 1.0f,
-            // varfuri pentru dreptunghi
-            -50.0f, -50.0f, 0.0f, 1.0f,
-            50.0f, -50.0f, 0.0f, 1.0f,
-            50.0f, 50.0f, 0.0f, 1.0f,
-            -50.0f, 50.0f, 0.0f, 1.0f,
+            // Varfuri pentru poligonul convex
+            // Triunghiul 1
+            50.0f, 150.0f, 0.0f, 1.0f,
+            100.0f, 150.0f, 0.0f, 1.0f,
+            100.0f, 200.0f, 0.0f, 1.0f,
+            // Triunghiul 2
+            50.0f, 150.0f, 0.0f, 1.0f,
+            100.0f, 200.0f, 0.0f, 1.0f,
+            50.0f, 250.0f, 0.0f, 1.0f,
+
+            // Varfuri pentru poligonul concav
+            // Triunghiul 1
+            150.0f, 150.0f, 0.0f, 1.0f,
+            250.0f, 150.0f, 0.0f, 1.0f,
+            150.0f, 250.0f, 0.0f, 1.0f,
+            250.0f, 150.0f, 0.0f, 1.0f,
+            250.0f, 250.0f, 0.0f, 1.0f,
+            200.0f, 200.0f, 0.0f, 1.0f,
     };
 
     // culorile varfurilor din colturi
     GLfloat Colors[] = {
+            // Poligon convex
             1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+
+            // Poligon concav
             0.0f, 0.0f, 1.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
     };
 
     // se creeaza un buffer nou
@@ -163,8 +181,7 @@ void RenderFunction(void) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // TO DO: schimbati transformarile (de exemplu deplasarea are loc pe axa Oy sau pe o alta dreapta)
-    resizeMatrix = glm::ortho(-width, width, -height,
-                              height); // scalam, "aducem" scena la "patratul standard" [-1,1]x[-1,1]
+    resizeMatrix = glm::ortho(0.0f, 400.0f, 0.0f,400.0f); // scalam, "aducem" scena la "patratul standard" [-1,1]x[-1,1]
     matrTransl = glm::translate(glm::mat4(1.0f), glm::vec3(i, 0.0, 0.0)); // controleaza translatia de-a lungul lui Ox
     matrDepl = glm::translate(glm::mat4(1.0f), glm::vec3(0, 80.0, 0.0)); // plaseaza patratul rosu
     matrScale1 = glm::scale(glm::mat4(1.0f), glm::vec3(1.1, 0.3, 0.0)); // folosita la desenarea dreptunghiului albastru
@@ -180,27 +197,27 @@ void RenderFunction(void) {
     glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
     glUniform1i(codColLocation, codCol);
     // Apelare DrawArrays
-    glDrawArrays(GL_LINES, 0, 4);
+    glDrawArrays(GL_TRIANGLES, 0, 12);
 
-    // Matricea pentru dreptunghiul albastru
-    myMatrix = resizeMatrix * matrTransl * matrScale1;
-    // Culoarea
-    codCol = 1;
-    // Transmitere variabile uniforme
-    glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
-    glUniform1i(codColLocation, codCol);
-    // Apelare DrawArrays
-    glDrawArrays(GL_POLYGON, 4, 4);
-
-    // Matricea pentru dreptunghiul rosu
-    myMatrix = resizeMatrix * matrTransl * matrRot * matrDepl * matrScale2;
-    // Culoarea
-    codCol = 2;
-    // Transmitere variabile uniforme
-    glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
-    glUniform1i(codColLocation, codCol);
-    // Apelare DrawArrays
-    glDrawArrays(GL_POLYGON, 4, 4);
+//    // Matricea pentru dreptunghiul albastru
+//    myMatrix = resizeMatrix * matrTransl * matrScale1;
+//    // Culoarea
+//    codCol = 1;
+//    // Transmitere variabile uniforme
+//    glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+//    glUniform1i(codColLocation, codCol);
+//    // Apelare DrawArrays
+//    glDrawArrays(GL_POLYGON, 4, 4);
+//
+//    // Matricea pentru dreptunghiul rosu
+//    myMatrix = resizeMatrix * matrTransl * matrRot * matrDepl * matrScale2;
+//    // Culoarea
+//    codCol = 2;
+//    // Transmitere variabile uniforme
+//    glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+//    glUniform1i(codColLocation, codCol);
+//    // Apelare DrawArrays
+//    glDrawArrays(GL_POLYGON, 4, 4);
 
     glutSwapBuffers();
     glFlush();
