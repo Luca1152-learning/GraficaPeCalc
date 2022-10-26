@@ -118,7 +118,6 @@ void RenderFunction(void)
     float red = ((float) rand() / RAND_MAX);
     float green = ((float) rand() / RAND_MAX);
     float blue = ((float) rand() / RAND_MAX);
-    std::cout << red << " " << green << " " << blue;
     glUniform1f(codRedLocation, red);
     glUniform1f(codGreenLocation, green);
     glUniform1f(codBlueLocation, blue);
