@@ -111,6 +111,15 @@ void RenderFunction(void)
     glPointSize(20.0);
     glDrawArrays(GL_POINTS, 0, 6);
     glDisable(GL_POINT_SMOOTH);
+
+    codCol = 2;
+    glUniform1i(codColLocation, codCol);
+    // Punctele cu o singura culoare
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(10.0);
+    glDrawArrays(GL_POINTS, 0, 6);
+    glDisable(GL_POINT_SMOOTH);
+
     glFlush();
 }
 void Cleanup(void)

@@ -6,10 +6,17 @@ out vec4 out_Color;
 uniform int codCol;
 
 void main(void)
-  {
-	if ( codCol==0 )
-		out_Color = ex_Color;
-	else
-		out_Color=vec4 (1.0, 0.0, 1.0, 0.0);
-  }
+{
+    switch (codCol){
+        case 0:
+            out_Color = ex_Color;
+            break;
+        case 1:
+            out_Color = vec4(1.0, 0.0, 0.0, 0.0);
+            break;
+        case 2:
+            out_Color = vec4(0.0, 1.0, 0.0, 0.0);
+            break;
+    }
+}
  
