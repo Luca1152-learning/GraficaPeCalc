@@ -211,9 +211,9 @@ void RenderFunction(void) {
     // Cu transformari
     center = glm::vec3(150.0, 200.0, 0.0); // Centrul pentru cele doua poligoane
     matrTransl1 = glm::translate(glm::mat4(1.0f), -center); // Translatie catre origine a punctului
-    matrRot = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotatie in jurul originii, de 180 de grade
+    matrRot = glm::rotate(glm::mat4(1.0f), glm::radians(40.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotatie in jurul originii, de 180 de grade
     matrTransl2 = glm::translate(glm::mat4(1.0f), center); // Translate inapoi catre centru
-    matrTransl3 = glm::translate(glm::mat4(1.0f), glm::vec3(000.0f, -125.0f, 0.0f)); // Translate cu 125 mai jos
+    matrTransl3 = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, -125.0f, 0.0f)); // Translate cu 125 mai jos
     myMatrix = resizeMatrix * matrTransl3 * matrTransl2 * matrRot * matrTransl1;
 
     codCol = 0;
