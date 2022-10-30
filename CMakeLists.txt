@@ -3,7 +3,7 @@ project(GraficaPeCalc)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/utils/ShadersUtils.cpp src/utils/ShadersUtils.h)
 
 find_package(GLEW REQUIRED)
 find_package(GLM REQUIRED)

@@ -2,68 +2,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "utils/ShadersUtils.h"
 
 GLFWwindow *Window;
 GLuint ProgramId, VaoId, VboId, ColorBufferId;
-
-const char *VertexShaderSource = R"SHADER-SOURCE(
-#version 330 core
-
-layout (location = 0) in vec4 in_Position;
-layout (location = 1) in vec4 in_Color;
-
-out vec4 ex_Color;
-
-void main() {
-    gl_Position = in_Position;
-    ex_Color = in_Color;
-}
-)SHADER-SOURCE";
-
-const char *FragmentShaderSource = R"SHADER-SOURCE(
-#version 330 core
-
-in vec4 ex_Color;
-out vec4 out_Color;
-
-void main() {
-    out_Color = ex_Color;
-}
-)SHADER-SOURCE";
-
-GLuint loadShaders(const char *vertexSource, const char *fragSource) {
-    GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShaderId, 1, &vertexSource, nullptr);
-    glCompileShader(vertexShaderId);
-
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
-
-    if (!success) {
-        glGetShaderInfoLog(vertexShaderId, 512, nullptr, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShaderId, 1, &fragSource, nullptr);
-    glCompileShader(fragmentShaderId);
-
-    glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
-
-    if (!success) {
-        glGetShaderInfoLog(fragmentShaderId, 512, nullptr, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    GLuint programId = glCreateProgram();
-    glAttachShader(programId, vertexShaderId);
-    glAttachShader(programId, fragmentShaderId);
-    glLinkProgram(programId);
-    glUseProgram(programId);
-
-    return programId;
-}
 
 void initialize() {
     GLfloat vertices[] = {
@@ -95,7 +37,7 @@ void initialize() {
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    ProgramId = loadShaders(VertexShaderSource, FragmentShaderSource);
+    ProgramId = ShadersUtils::loadShaders("shaders/shader.vert", "shaders/shader.frag");
 }
 
 void render() {
