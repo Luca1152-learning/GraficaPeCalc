@@ -1,81 +1,134 @@
-// Codul sursa este adaptat dupa OpenGLBook.com
-#include <stdlib.h> // necesare pentru citirea shader-elor
-#include <stdio.h>
-#include <GL/glew.h> // glew apare inainte de freeglut
-#include <GL/freeglut.h> // nu trebuie uitat freeglut.h
+#include <GL/glew.h>
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
 
-//////////////////////////////////////
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-GLuint VaoId, VboId, ColorBufferId, VertexShaderId, FragmentShaderId, ProgramId;
+#include <iostream>
 
-///////////////////////////////////////////
 
-// Shader-ul de varfuri / Vertex shader (este privit ca un sir de caractere)
-const GLchar *VertexShader = {
-        "#version 400\n"
+GLFWwindow* Window;
+GLuint ProgramId, VaoId, VboId, ColorBufferId;
 
-        "layout(location=0) in vec4 in_Position;\n"
-        "layout(location=1) in vec4 in_Color;\n"
-        "out vec4 ex_Color;\n"
+const char* VertexShaderSource = R"SHADER-SOURCE(
+#version 330 core
 
-        "void main(void)\n"
-        "{\n"
-        "  gl_Position = in_Position;\n"
-        "  ex_Color = in_Color;\n"
-        "}\n"};
-// Shader-ul de fragment / Fragment shader (este privit ca un sir de caractere)
-const GLchar *FragmentShader = {
-        "#version 400\n"
+layout (location = 0) in vec4 in_Position;
+layout (location = 1) in vec4 in_Color;
 
-        "in vec4 ex_Color;\n"
-        "out vec4 out_Color;\n"
+out vec4 ex_Color;
 
-        "void main(void)\n"
-        "{\n"
-        "  out_Color = ex_Color;\n"
-        "}\n"};
+void main() {
+    gl_Position = in_Position;
+    ex_Color = in_Color;
+}
+)SHADER-SOURCE";
 
-void CreateVBO(void) {
-    // varfurile
-    GLfloat Vertices[] = {
-            -0.8f, -0.8f, 0.0f, 1.0f,
-            0.0f, 0.8f, 0.0f, 1.0f,
-            0.8f, -0.8f, 0.0f, 1.0f
-    };
+const char* FragmentShaderSource = R"SHADER-SOURCE(
+#version 330 core
 
-    // culorile, ca atribute ale varfurilor
-    GLfloat Colors[] = {
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            //  0.0f, 0.0f, 1.0f, 1.0f
-    };
+in vec4 ex_Color;
+out vec4 out_Color;
 
-    // se creeaza un buffer nou
-    glGenBuffers(1, &VboId);
-    // este setat ca buffer curent
-    glBindBuffer(GL_ARRAY_BUFFER, VboId);
-    // punctele sunt "copiate" in bufferul curent
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+void main() {
+    out_Color = ex_Color;
+}
+)SHADER-SOURCE";
 
-    // se creeaza / se leaga un VAO (Vertex Array Object) - util cand se
-    // utilizeaza mai multe VBO
-    glGenVertexArrays(1, &VaoId);
-    glBindVertexArray(VaoId);
-    // se activeaza lucrul cu atribute; atributul 0 = pozitie
-    glEnableVertexAttribArray(0);
-    //
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+void Initialize();
+void Render();
+void Cleanup();
 
-    // un nou buffer, pentru culoare
-    glGenBuffers(1, &ColorBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Colors), Colors, GL_STATIC_DRAW);
-    // atributul 1 =  culoare
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
+GLuint LoadShaders(const char* vertexSource, const char* fragSource);
+
+int main() {
+    if (!glfwInit()) {
+        exit(EXIT_FAILURE);
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make macOS happy; should not be needed
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    Window = glfwCreateWindow(640, 480, "macOS OpenGL", nullptr, nullptr);
+    if (!Window) {
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
+
+    glfwMakeContextCurrent(Window);
+    glewInit();
+    glfwSwapInterval(1);
+
+    Initialize();
+
+    while (!glfwWindowShouldClose(Window)) {
+        int width, height;
+        glfwGetFramebufferSize(Window, &width, &height);
+
+        glViewport(0, 0, width, height);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        Render();
+
+        glfwSwapBuffers(Window);
+        glfwPollEvents();
+    }
+
+    Cleanup();
+
+    glfwDestroyWindow(Window);
+    glfwTerminate();
+    return 0;
 }
 
-void DestroyVBO(void) {
+void Initialize() {
+    GLfloat vertices[] = {
+            -0.5, -0.5, 0.0, 1.0,
+            0.0,  0.5, 0.0, 1.0,
+            0.5, -0.5, 0.0, 1.0,
+    };
+
+    GLfloat colors[] = {
+            1.0, 0.0, 0.0, 1.0,
+            0.0, 1.0, 0.0, 1.0,
+            0.0, 0.0, 1.0, 1.0,
+    };
+
+    glGenVertexArrays(1, &VaoId);
+    glBindVertexArray(VaoId);
+
+    glGenBuffers(1, &VboId);
+    glBindBuffer(GL_ARRAY_BUFFER, VboId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    glGenBuffers(1, &ColorBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    ProgramId = LoadShaders(VertexShaderSource, FragmentShaderSource);
+}
+
+void Render() {
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    glFlush();
+}
+
+void Cleanup() {
+    glDeleteProgram(ProgramId);
+
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
 
@@ -87,62 +140,36 @@ void DestroyVBO(void) {
     glDeleteVertexArrays(1, &VaoId);
 }
 
-void CreateShaders(void) {
-    VertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(VertexShaderId, 1, &VertexShader, NULL);
-    glCompileShader(VertexShaderId);
+GLuint LoadShaders(const char* vertexSource, const char* fragSource) {
+    GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShaderId, 1, &vertexSource, nullptr);
+    glCompileShader(vertexShaderId);
 
-    FragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(FragmentShaderId, 1, &FragmentShader, NULL);
-    glCompileShader(FragmentShaderId);
+    int  success;
+    char infoLog[512];
+    glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
 
-    ProgramId = glCreateProgram();
-    glAttachShader(ProgramId, VertexShaderId);
-    glAttachShader(ProgramId, FragmentShaderId);
-    glLinkProgram(ProgramId);
-    glUseProgram(ProgramId);
-}
+    if (!success) {
+        glGetShaderInfoLog(vertexShaderId, 512, nullptr, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 
-void DestroyShaders(void) {
-    glUseProgram(0);
+    GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShaderId, 1, &fragSource, nullptr);
+    glCompileShader(fragmentShaderId);
 
-    glDetachShader(ProgramId, VertexShaderId);
-    glDetachShader(ProgramId, FragmentShaderId);
+    glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
 
-    glDeleteShader(FragmentShaderId);
-    glDeleteShader(VertexShaderId);
+    if (!success) {
+        glGetShaderInfoLog(fragmentShaderId, 512, nullptr, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 
-    glDeleteProgram(ProgramId);
-}
+    GLuint programId = glCreateProgram();
+    glAttachShader(programId, vertexShaderId);
+    glAttachShader(programId, fragmentShaderId);
+    glLinkProgram(programId);
+    glUseProgram(programId);
 
-void Initialize(void) {
-    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);  // culoarea de fond a ecranului
-}
-
-void RenderFunction(void) {
-    glClear(GL_COLOR_BUFFER_BIT);
-    CreateVBO();
-    CreateShaders();
-    glPointSize(20.0);
-    glDrawArrays(GL_POINTS, 0, 3);
-    glFlush();
-}
-
-void Cleanup(void) {
-    DestroyShaders();
-    DestroyVBO();
-}
-
-int main(int argc, char *argv[]) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowPosition(100, 100);  // pozitia initiala a ferestrei
-    glutInitWindowSize(700, 500);      // dimensiunile ferestrei
-    glutCreateWindow("Primul triunghi - OpenGL <<nou>>");  // titlul ferestrei
-    glewInit();  // nu uitati de initializare glew; trebuie initializat inainte de
-    // a a initializa desenarea
-    Initialize();
-    glutDisplayFunc(RenderFunction);
-    glutCloseFunc(Cleanup);
-    glutMainLoop();
+    return programId;
 }
