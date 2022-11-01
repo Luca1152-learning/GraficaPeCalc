@@ -14,40 +14,47 @@
 
 class House {
 private:
-    GLuint vboId, vaoId;
+    GLuint vaoId, vboId, eboId;
 
     Color wallColor = Color(255, 0, 255);
     Color roofColor = Color(255, 0, 0);
     Color doorColor = Color(255, 0, 255);
 
     void initialize() {
-        float testTriangle[] = {
-                -0.9f, -0.5f, 0.0f,  // left
-                -0.0f, -0.5f, 0.0f,  // right
-                -0.45f, 0.5f, 0.0f,  // top
+        float vertices[] = {
+                -0.5f, -0.5f, // 0 bottom left
+                0.5f, -0.5f, // 1 bottom right
+                0.5f, 0.5f, // 2 top right
+                -0.5f, 0.5f // 3 top left
+        };
+        GLuint indices[] = {
+                0, 1, 2,
+                0, 2, 3,
         };
 
         glGenVertexArrays(1, &vaoId);
         glGenBuffers(1, &vboId);
+        glGenBuffers(1, &eboId);
 
         glBindVertexArray(vaoId);
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(testTriangle), testTriangle, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
         glEnableVertexAttribArray(0);
         glBindVertexArray(0);
     }
 
 public:
     House() {
-        if (!vboId || !vaoId) {
-            initialize();
-        }
+        initialize();
     }
 
     void render() {
         glBindVertexArray(vaoId);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
     }
 };
 
