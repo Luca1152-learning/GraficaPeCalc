@@ -6,6 +6,9 @@
 GLFWwindow *window;
 GLuint programId, vaoId, vboId, colorBufferId;
 
+const int WIDTH = 1280;
+const int HEIGHT = 720;
+
 void initialize() {
     GLfloat vertices[] = {
             -0.5, -0.5, 0.0, 1.0,
@@ -68,7 +71,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(640, 480, "macOS OpenGL", nullptr, nullptr);
+    window = glfwCreateWindow(WIDTH, HEIGHT, "macOS OpenGL", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
