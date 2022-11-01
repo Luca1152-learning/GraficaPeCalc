@@ -3,11 +3,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "utils/ShadersUtils.h"
 
+using namespace glm;
+
+// Window
+const int WIDTH = 1280;
+const int HEIGHT = 720;
 GLFWwindow *window;
 GLuint programId, vaoId, vboId, colorBufferId;
 
-const int WIDTH = 1280;
-const int HEIGHT = 720;
+// Landscape
+// - Sky
+const vec3 SKY_COLOR = vec3(157.0f / 255, 213.0f / 255, 221.0f / 255);
 
 void initialize() {
     GLfloat vertices[] = {
@@ -88,7 +94,7 @@ int main() {
         glfwGetFramebufferSize(window, &width, &height);
 
         glViewport(0, 0, width, height);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(SKY_COLOR[0], SKY_COLOR[1], SKY_COLOR[2], 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         render();
