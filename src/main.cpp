@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "utils/ShadersUtils.h"
+#include "House.h"
 
 using namespace glm;
 
@@ -14,6 +15,8 @@ GLuint programId, vaoId, vboId, colorBufferId;
 // Landscape
 // - Sky
 const vec3 SKY_COLOR = vec3(157.0f / 255, 213.0f / 255, 221.0f / 255);
+
+House* house;
 
 void initialize() {
     GLfloat vertices[] = {
@@ -49,9 +52,9 @@ void initialize() {
 }
 
 void render() {
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glUseProgram(programId);
 
-    glFlush();
+    house->render();
 }
 
 void cleanUp() {
@@ -88,6 +91,7 @@ int main() {
     glfwSwapInterval(1);
 
     initialize();
+    house = new House();
 
     while (!glfwWindowShouldClose(window)) {
         int width, height;
@@ -99,6 +103,7 @@ int main() {
 
         render();
 
+        glFlush();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
