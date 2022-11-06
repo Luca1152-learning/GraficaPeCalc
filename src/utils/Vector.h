@@ -8,7 +8,7 @@ private:
     float x, y, z, u;
 
 public:
-    Vector(float x, float y, float z = 0.0f, float u = 0.0f) : x(x), y(y), z(z), u(u) {};
+    Vector(float x, float y, float z = 0.0f, float u = 1.0f) : x(x), y(y), z(z), u(u) {};
 
     Vector(Color color) : x(color.getR()), y(color.getG()), z(color.getB()), u(color.getA()) {};
 

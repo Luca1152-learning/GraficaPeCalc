@@ -34,6 +34,7 @@ private:
     Matrix triangleVerticesColors;
 
     float centerX, centerY, scaleX, scaleY;
+    bool flip;
     const vec3 DRAWABLE_CENTER = vec3(75.0f, 80.0f, 0.0f);
 
     void initialize() final {
@@ -75,7 +76,7 @@ private:
                 {95.0f,  25.0f}, // 34
         };
         triangleVertices = {
-                2,
+                4,
                 {
                         // Side-wall
                         vertices[0], vertices[1], vertices[3],
@@ -164,9 +165,9 @@ private:
         float *triangleVerticesCArray = triangleVertices.toCArray();
         glGenBuffers(1, &verticesVbo);
         glBindBuffer(GL_ARRAY_BUFFER, verticesVbo);
-        glBufferData(GL_ARRAY_BUFFER, 2 * sizeof(float) * triangleVertices.getSize(), triangleVerticesCArray,
+        glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * triangleVertices.getSize(), triangleVerticesCArray,
                      GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
         glEnableVertexAttribArray(0);
 
         // Colors VBO
@@ -184,8 +185,8 @@ private:
 
 public:
     House(
-            float centerX, float centerY, float scale
-    ) : centerX(centerX), centerY(centerY), scaleX(scale), scaleY(scale) {
+            float centerX, float centerY, float scale, bool flip
+    ) : centerX(centerX), centerY(centerY), scaleX(scale), scaleY(scale), flip(flip) {
         initialize();
     }
 
@@ -194,7 +195,8 @@ public:
         mat4 translateTo00Matrix = translate(mat4(1.0f), -DRAWABLE_CENTER);
         mat4 translateToXYMatrix = translate(mat4(1.0f), vec3(centerX, centerY, 0.0f));
         mat4 scaleMatrix = scale(mat4(1.0f), vec3(scaleX, scaleY, 0.0f));
-        mat4 resultingMatrix = resizeMatrix * translateToXYMatrix * scaleMatrix * translateTo00Matrix;
+        mat4 flipMatrix = flip ? rotate(mat4(1.0f), radians(180.0f), vec3(0.0f, 1.0f, 0.0f)) : mat4(1.0f);
+        mat4 resultingMatrix = resizeMatrix * translateToXYMatrix * scaleMatrix * flipMatrix * translateTo00Matrix;
 
         glUniformMatrix4fv(Constants::MATRIX_LOCATION, 1, GL_FALSE, &resultingMatrix[0][0]);
 
