@@ -41,8 +41,11 @@ void initializeShaders() {
 }
 
 void initializeScene() {
-    House *house = new House();
-    drawables.push_back(house);
+    House *houseA = new House(150.0f, 150.0f);
+    drawables.push_back(houseA);
+
+    House *houseB = new House(250.0f, 350.0f);
+    drawables.push_back(houseB);
 }
 
 void render() {
