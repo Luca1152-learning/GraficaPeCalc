@@ -8,15 +8,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include "utils/ShadersUtils.h"
-#include "utils/Color.h"
-#include "utils/Constants.h"
+#include "../utils/ShadersUtils.h"
+#include "../utils/Color.h"
+#include "../utils/Constants.h"
+#include "Drawable.h"
 
-class House {
+class House : public Drawable {
 private:
-    GLuint vao, verticesVbo, colorsVbo;
-
-    void initialize() {
+    void initialize() final {
         float vertices[] = {
                 100.0f, 100.0f, // bottom left
                 200.0f, 100.0f, // bottom right

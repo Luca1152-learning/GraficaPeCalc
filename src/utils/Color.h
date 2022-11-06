@@ -1,7 +1,3 @@
-//
-// Created by User on 01.11.2022.
-//
-
 #ifndef GC_COLOR_H
 #define GC_COLOR_H
 
@@ -11,18 +7,20 @@ using namespace std;
 
 class Color {
 private:
-    float r, g, b;
+    float r, g, b, a;
 
-    Color(int r, int g, int b);;
+    Color(int r, int g, int b, float a);
 
 public:
-    static Color fromHex(string hexCode);
+    static Color fromHex(string hexCode, float alpha = 1.0f);
 
     float getR() const;
 
     float getG() const;
 
     float getB() const;
+
+    float getA() const;
 };
 
 

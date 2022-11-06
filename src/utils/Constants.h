@@ -6,6 +6,7 @@ using namespace glm;
 
 class Constants {
 public:
+    // Window
     static const int WIDTH;
     static const int HEIGHT;
 
