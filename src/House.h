@@ -16,10 +16,6 @@ class House {
 private:
     GLuint vaoId, vboId, colorId, verticesEboId, colorsEboId, vaoId2;
 
-    Color wallColor = Color(255, 0, 255);
-    Color roofColor = Color(255, 0, 0);
-    Color doorColor = Color(255, 0, 255);
-
     void initialize() {
         float vertices[] = {
                 -0.5f, -0.5f, // bottom left

@@ -5,14 +5,18 @@
 #ifndef GC_COLOR_H
 #define GC_COLOR_H
 
+#include "string"
+
+using namespace std;
 
 class Color {
 private:
-    int r;
-    int g;
-    int b;
+    float r, g, b;
+
+    Color(int r, int g, int b);;
+
 public:
-    Color(int r, int g, int b);
+    static Color fromHex(string hexCode);
 
     float getR() const;
 

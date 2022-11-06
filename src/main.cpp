@@ -16,7 +16,7 @@ GLuint programId, vaoId, vboId, colorBufferId;
 // - Sky
 const vec3 SKY_COLOR = vec3(157.0f / 255, 213.0f / 255, 221.0f / 255);
 
-House* house;
+House *house;
 
 void initialize() {
     GLfloat vertices[] = {
