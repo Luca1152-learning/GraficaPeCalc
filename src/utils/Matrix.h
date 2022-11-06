@@ -12,7 +12,11 @@ private:
     vector<Vector> vectors;
 
 public:
-    Matrix(int vectorLength, vector<Vector> vectors) : vectorLength(vectorLength), vectors(vectors) {
+    Matrix(int vectorLength = 0, vector<Vector> vectors = {}) : vectorLength(vectorLength), vectors(vectors) {
+    }
+
+    int getSize() {
+        return vectors.size();
     }
 
     float *toCArray() {
