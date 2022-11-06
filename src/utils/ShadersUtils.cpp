@@ -23,7 +23,7 @@ GLuint ShadersUtils::loadShaders(const char *vertexShaderPath, const char *fragS
         vertexFile.close();
         fragFile.close();
 
-        // Convert the stream into a string
+        // Convert the stream into x string
         vertexSourceString = vertexStream.str();
         fragSourceString = fragStream.str();
     } catch (ifstream::failure &e) {

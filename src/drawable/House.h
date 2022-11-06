@@ -12,25 +12,36 @@
 #include "../utils/Color.h"
 #include "../utils/Constants.h"
 #include "Drawable.h"
+#include <vector>
+#include "../utils/Vector.h"
+#include "../utils/Matrix.h"
+
+using namespace std;
 
 class House : public Drawable {
 private:
+    Color sideWallColor = Color::fromHex("#DEDCDA");
+
     void initialize() final {
-        float vertices[] = {
-                100.0f, 100.0f, // bottom left
-                200.0f, 100.0f, // bottom right
-                200.0f, 200.0f, // top right
-                100.0f, 100.0f, // bottom left
-                200.0f, 200.0f, // top right
-                100.0f, 200.0f // top left
+        vector<Vector> vertices = {
+                {0.0f,  0.0f},
+                {25.0f, 0.0f},
+                {25.0f, 100.0f},
+                {0.0f,  100.0f},
         };
-        GLfloat colors[] = {
-                1.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
+        Matrix triangleVertices = {
+                2,
+                {
+                        vertices[0], vertices[1], vertices[3],
+                        vertices[1], vertices[3], vertices[2],
+                }
+        };
+
+        Matrix triangleVerticesColors = {
+                4, {
+                        sideWallColor, sideWallColor, sideWallColor,
+                        sideWallColor, sideWallColor, sideWallColor,
+                }
         };
 
         // Bind VAO
@@ -38,16 +49,20 @@ private:
         glBindVertexArray(vao);
 
         // Vertices VBO
+        float *triangleVerticesCArray = triangleVertices.toCArray();
         glGenBuffers(1, &verticesVbo);
         glBindBuffer(GL_ARRAY_BUFFER, verticesVbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * sizeof(triangleVerticesCArray), triangleVerticesCArray,
+                     GL_STATIC_DRAW);
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
         glEnableVertexAttribArray(0);
 
         // Colors VBO
+        float *triangleVerticesColorsCArray = triangleVerticesColors.toCArray();
         glGenBuffers(1, &colorsVbo);
         glBindBuffer(GL_ARRAY_BUFFER, colorsVbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * sizeof(triangleVerticesColorsCArray),
+                     triangleVerticesColorsCArray, GL_STATIC_DRAW);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 
