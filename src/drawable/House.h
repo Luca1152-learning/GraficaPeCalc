@@ -22,6 +22,8 @@ class House : public Drawable {
 private:
     Color sideWallColor = Color::fromHex("#DEDCDA");
     Color wallColor = Color::fromHex("#E9E7E8");
+    Color roofGutterColor = Color::fromHex("#7C292E");
+    Color roofColor = Color::fromHex("#BA4C40");
 
     vector<Vector> vertices;
     Matrix triangleVertices;
@@ -35,6 +37,15 @@ private:
                 {0.0f,   100.0f}, // 3
                 {150.0f, 0.0f}, // 4
                 {150.0f, 100.0f}, // 5
+                {0.0f,   110.0f}, // 6
+                {150.0f, 110.0f}, // 7
+                {30.0f,  145.0f}, // 8
+                {50.0f,  145.0f}, // 9
+                {120.0f, 145.0f}, // 10
+                {32.0f,  165.0f}, // 11
+                {50.0f,  165.0f}, // 12
+                {30.0f,  175.0f}, // 13
+                {50.0f,  175.0f}, // 12
         };
         triangleVertices = {
                 2,
@@ -45,6 +56,17 @@ private:
                         // Wall
                         vertices[1], vertices[2], vertices[4],
                         vertices[2], vertices[4], vertices[5],
+                        // Roof gutter
+                        vertices[3], vertices[5], vertices[6],
+                        vertices[5], vertices[6], vertices[7],
+                        // Roof
+                        vertices[6], vertices[7], vertices[8],
+                        vertices[7], vertices[8], vertices[9],
+                        vertices[7], vertices[9], vertices[10],
+                        vertices[8], vertices[9], vertices[11],
+                        vertices[9], vertices[11], vertices[12],
+                        vertices[11], vertices[12], vertices[13],
+                        vertices[12], vertices[13], vertices[14],
                 }
         };
         triangleVerticesColors = {
@@ -55,6 +77,17 @@ private:
                         // Wall
                         wallColor, wallColor, wallColor,
                         wallColor, wallColor, wallColor,
+                        // Roof gutter
+                        roofGutterColor, roofGutterColor, roofGutterColor,
+                        roofGutterColor, roofGutterColor, roofGutterColor,
+                        // Roof
+                        roofColor, roofColor, roofColor,
+                        roofColor, roofColor, roofColor,
+                        roofColor, roofColor, roofColor,
+                        roofColor, roofColor, roofColor,
+                        roofColor, roofColor, roofColor,
+                        roofGutterColor, roofGutterColor, roofGutterColor,
+                        roofGutterColor, roofGutterColor, roofGutterColor,
                 }
         };
 
