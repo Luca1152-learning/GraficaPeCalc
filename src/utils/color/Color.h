@@ -2,6 +2,7 @@
 #define GC_COLOR_H
 
 #include "string"
+#include "../math/Vector.h"
 
 using namespace std;
 
@@ -13,6 +14,8 @@ private:
 
 public:
     static Color fromHex(string hexCode, float alpha = 1.0f);
+
+    operator Vector() const;
 
     float getR() const;
 

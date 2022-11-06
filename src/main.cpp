@@ -2,9 +2,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
-#include "utils/ShadersUtils.h"
+#include "utils/render/ShadersUtils.h"
 #include "drawable/House.h"
-#include "utils/Colors.h"
+#include "utils/color/Colors.h"
 
 using namespace glm;
 using namespace std;

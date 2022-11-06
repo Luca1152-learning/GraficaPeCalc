@@ -28,3 +28,7 @@ float Color::getB() const {
 float Color::getA() const {
     return a;
 }
+
+Color::operator Vector() const {
+    return Vector(r, g, b, a);
+}
