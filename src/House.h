@@ -14,7 +14,7 @@
 
 class House {
 private:
-    GLuint vaoId, vboId, colorId, verticesEboId, colorsEboId, vaoId2;
+    GLuint vao, verticesVbo, colorsVbo;
 
     void initialize() {
         float vertices[] = {
@@ -34,25 +34,25 @@ private:
                 1.0f, 0.0f, 0.0f, 1.0f,
         };
 
-        glGenVertexArrays(1, &vaoId);
-        glBindVertexArray(vaoId);
+        // Bind VAO
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
 
-        glGenBuffers(1, &vboId);
-        glGenBuffers(1, &verticesEboId);
-        glBindBuffer(GL_ARRAY_BUFFER, vboId);
+        // Vertices VBO
+        glGenBuffers(1, &verticesVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, verticesVbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
         glEnableVertexAttribArray(0);
 
-        glGenBuffers(1, &colorId);
-        glGenBuffers(1, &colorsEboId);
-        glBindBuffer(GL_ARRAY_BUFFER, colorId);
+        // Colors VBO
+        glGenBuffers(1, &colorsVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, colorsVbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colorsEboId);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 
+        // Clear VAO
         glBindVertexArray(0);
     }
 
@@ -62,7 +62,7 @@ public:
     }
 
     void render() {
-        glBindVertexArray(vaoId);
+        glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
     }
