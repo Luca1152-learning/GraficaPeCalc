@@ -125,8 +125,14 @@ void House::setupTriangles() {
     };
 }
 
-House::House(float centerX, float centerY, float scale, bool flip) :
-        Drawable(centerX, centerY, scale, scale, flip) {
+House::House(
+        float centerX, float centerY, float scale, bool flip,
+        Color sideWallColor, Color wallColor, Color roofGutterColor, Color roofColor,
+        Color windowColor, Color doorColor, Color doorFrameColor, Color doorKnobColor
+) :
+        Drawable(centerX, centerY, scale, scale, flip),
+        sideWallColor(sideWallColor), wallColor(wallColor), roofGutterColor(roofGutterColor), roofColor(roofColor),
+        windowColor(windowColor), doorColor(doorColor), doorFrameColor(doorFrameColor), doorKnobColor(doorKnobColor) {
     setupTriangles();
     setupVao();
 }

@@ -41,10 +41,19 @@ void initializeShaders() {
 }
 
 void initializeScene() {
-    House *houseA = new House(150.0f, 150.0f, 1.0f, false);
+    House *houseA = new House(
+            100.0f, 350.0f, 0.7f, false,
+            Color::fromHex("#DEDCDA"), Color::fromHex("#E9E7E8"), Color::fromHex("#7C292E"),
+            Color::fromHex("#BA4C40"), Color::fromHex("#458592"), Color::fromHex("#C5A671"),
+            Color::fromHex("#966D44"), Color::fromHex("#EFCF9D")
+    );
     drawables.push_back(houseA);
 
-    House *houseB = new House(350.0f, 350.0f, 0.8f, true);
+    House *houseB = new House(
+            450.0f, 375.0f, 0.4f, true,
+            Color::fromHex("#DAC09B"), Color::fromHex("#D3B589"), Color::fromHex("#41494E"), Color::fromHex("#59616C"),
+            Color::fromHex("#3C8898"), Color::fromHex("#FBE6BE"), Color::fromHex("#B89A6B"), Color::fromHex("#B89A6B")
+    );
     drawables.push_back(houseB);
 }
 

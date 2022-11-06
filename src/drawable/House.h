@@ -32,7 +32,11 @@ private:
     void setupTriangles() final;
 
 public:
-    House(float centerX, float centerY, float scale = 1.0f, bool flip = false);
+    House(
+            float centerX, float centerY, float scale, bool flip,
+            Color sideWallColor, Color wallColor, Color roofGutterColor, Color roofColor,
+            Color windowColor, Color doorColor, Color doorFrameColor, Color doorKnobColor
+    );
 };
 
 
