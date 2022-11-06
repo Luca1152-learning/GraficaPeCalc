@@ -22,12 +22,12 @@ private:
 
     void initialize() {
         float vertices[] = {
-                -0.5f, -0.5f, // 0 bottom left
-                0.5f, -0.5f, // 1 bottom right
-                0.5f, 0.5f, // 2 top right
-                -0.5f, -0.5f, // 0 bottom left
-                0.5f, 0.5f, // 2 top right
-                -0.5f, 0.5f // 3 top left
+                -0.5f, -0.5f, // bottom left
+                0.5f, -0.5f, // bottom right
+                0.5f, 0.5f, // top right
+                -0.5f, -0.5f, // bottom left
+                0.5f, 0.5f, // top right
+                -0.5f, 0.5f // top left
         };
         GLfloat colors[] = {
                 1.0f, 0.0f, 0.0f, 1.0f,
