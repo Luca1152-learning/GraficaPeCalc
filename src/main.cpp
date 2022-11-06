@@ -7,8 +7,6 @@
 using namespace glm;
 
 // Window
-const int WIDTH = 1280;
-const int HEIGHT = 720;
 GLFWwindow *window;
 GLuint programId, vaoId, vboId, colorBufferId;
 
@@ -49,6 +47,7 @@ void initialize() {
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     programId = ShadersUtils::loadShaders("shaders/shader.vert", "shaders/shader.frag");
+    Constants::MATRIX_LOCATION = glGetUniformLocation(programId, "matrix");
 }
 
 void render() {
@@ -80,7 +79,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(WIDTH, HEIGHT, "macOS OpenGL", nullptr, nullptr);
+    window = glfwCreateWindow(Constants::WIDTH, Constants::HEIGHT, "macOS OpenGL", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);

@@ -18,12 +18,12 @@ private:
 
     void initialize() {
         float vertices[] = {
-                -0.5f, -0.5f, // bottom left
-                0.5f, -0.5f, // bottom right
-                0.5f, 0.5f, // top right
-                -0.5f, -0.5f, // bottom left
-                0.5f, 0.5f, // top right
-                -0.5f, 0.5f // top left
+                100.0f, 100.0f, // bottom left
+                200.0f, 100.0f, // bottom right
+                200.0f, 200.0f, // top right
+                100.0f, 100.0f, // bottom left
+                200.0f, 200.0f, // top right
+                100.0f, 200.0f // top left
         };
         GLfloat colors[] = {
                 1.0f, 0.0f, 0.0f, 1.0f,
@@ -62,6 +62,9 @@ public:
     }
 
     void render() {
+        mat4 resizeMatrix = Constants::RESIZE_MATRIX;
+        glUniformMatrix4fv(Constants::MATRIX_LOCATION, 1, GL_FALSE, &resizeMatrix[0][0]);
+
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
