@@ -33,7 +33,7 @@ private:
     Matrix triangleVertices;
     Matrix triangleVerticesColors;
 
-    float centerX, centerY;
+    float centerX, centerY, scaleX, scaleY;
     const vec3 DRAWABLE_CENTER = vec3(75.0f, 80.0f, 0.0f);
 
     void initialize() final {
@@ -183,7 +183,9 @@ private:
     }
 
 public:
-    House(float centerX, float centerY) : centerX(centerX), centerY(centerY) {
+    House(
+            float centerX, float centerY, float scale
+    ) : centerX(centerX), centerY(centerY), scaleX(scale), scaleY(scale) {
         initialize();
     }
 
@@ -191,7 +193,8 @@ public:
         mat4 resizeMatrix = Constants::RESIZE_MATRIX;
         mat4 translateTo00Matrix = translate(mat4(1.0f), -DRAWABLE_CENTER);
         mat4 translateToXYMatrix = translate(mat4(1.0f), vec3(centerX, centerY, 0.0f));
-        mat4 resultingMatrix = resizeMatrix * translateToXYMatrix * translateTo00Matrix;
+        mat4 scaleMatrix = scale(mat4(1.0f), vec3(scaleX, scaleY, 0.0f));
+        mat4 resultingMatrix = resizeMatrix * translateToXYMatrix * scaleMatrix * translateTo00Matrix;
 
         glUniformMatrix4fv(Constants::MATRIX_LOCATION, 1, GL_FALSE, &resultingMatrix[0][0]);
 
