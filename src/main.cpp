@@ -4,7 +4,7 @@
 #include <vector>
 #include "utils/render/ShadersUtils.h"
 #include "drawable/House.h"
-#include "drawable/Circle.h"
+#include "drawable/sun/Sun.h"
 #include "utils/color/Colors.h"
 
 using namespace glm;
@@ -64,8 +64,8 @@ void initializeScene() {
     );
     drawables.push_back(houseC);
 
-    Circle* circle = new Circle(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
-    drawables.push_back(circle);
+    Sun* sun = new Sun(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
+    drawables.push_back(sun);
 }
 
 void render() {
