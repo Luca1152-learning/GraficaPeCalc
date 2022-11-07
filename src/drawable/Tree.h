@@ -39,7 +39,8 @@ private:
                         // Trunk
                         trunkColor, trunkColor, trunkColor,
                         trunkColor, trunkColor, trunkColor,
-                        // Left triangle                        darkGreenColor, darkGreenColor, darkGreenColor,
+                        // Left triangle
+                        darkGreenColor, darkGreenColor, darkGreenColor,
                         // Right triangle
                         lightGreenColor, lightGreenColor, lightGreenColor,
                 }
