@@ -74,6 +74,9 @@ void render() {
     for (auto it: drawables) {
         it->render();
     }
+    for (auto it: drawables) {
+        it->stepAnimation();
+    }
 }
 
 void cleanUp() {

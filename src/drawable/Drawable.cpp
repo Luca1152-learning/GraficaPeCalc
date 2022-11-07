@@ -57,3 +57,9 @@ void Drawable::render() {
     glDrawArrays(GL_TRIANGLES, 0, triangleVertices.getSize());
     glBindVertexArray(0);
 }
+
+void Drawable::stepAnimation() {}
+
+void Drawable::setCenterOfRotation(float centerX, float centerY) {
+    centerOfRotation = {centerX, centerY};
+}

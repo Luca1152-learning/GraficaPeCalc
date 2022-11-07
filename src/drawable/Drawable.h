@@ -34,11 +34,11 @@ public:
     Drawable(float translateX = 0.0f, float translateY = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f,
              bool flip = false);
 
-    void setCenterOfRotation(float centerX, float centerY) {
-        centerOfRotation = {centerX, centerY};
-    }
+    void setCenterOfRotation(float centerX, float centerY);
 
     virtual void render();
+
+    virtual void stepAnimation();
 };
 
 
