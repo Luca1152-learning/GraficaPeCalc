@@ -8,24 +8,26 @@
 
 class SunRays : public Drawable {
 private:
-    vector<SunRay *> sunRays;
+    vec2 sunCenter;
+    float sunRadius;
     Color color;
 
+    vector<SunRay *> sunRays;
+
     void setupTriangles() final override {
-        sunRays.push_back(new SunRay(translate[0], translate[1], 0.0f, color));
-        sunRays.push_back(new SunRay(translate[0], translate[1], 45.0f, color));
-        sunRays.push_back(new SunRay(translate[0], translate[1], 90.0f, color));
-        sunRays.push_back(new SunRay(translate[0], translate[1], 135.0f, color));
-        sunRays.push_back(new SunRay(translate[0], translate[1], 180.0f, color));
-        sunRays.push_back(new SunRay(translate[0], translate[1], 270.0f, color));
-        sunRays.push_back(new SunRay(translate[0], translate[1], 225.0f, color));
-        sunRays.push_back(new SunRay(translate[0], translate[1], 315.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 0.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 45.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 90.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 135.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 180.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 270.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 225.0f, color));
+        sunRays.push_back(new SunRay(sunCenter, sunRadius, 315.0f, color));
     }
 
 public:
-    SunRays(int sunCenterX, int sunCenterY, Color color) : Drawable(100.0f, 100.0f), color(color) {
+    SunRays(vec2 sunCenter, float sunRadius, Color color) : sunCenter(sunCenter), sunRadius(sunRadius), color(color) {
         setupTriangles();
-        setupVao();
     }
 
     void render() override {

@@ -9,6 +9,7 @@
 
 class Sun : public Drawable {
 private:
+    vec2 center;
     float radius;
     Color color;
 
@@ -16,13 +17,13 @@ private:
     SunRays *sunRays;
 
     void setupTriangles() final override {
-        circle = new Circle(translate[0], translate[1], radius, color);
-        sunRays = new SunRays(translate[0], translate[1], color);
+        circle = new Circle(center.x, center.y, radius, color);
+        sunRays = new SunRays(center, radius, color);
     }
 
 public:
     Sun(float centerX, float centerY, float radius, Color color) :
-            Drawable(centerX, centerY), radius(radius), color(color) {
+            center(centerX, centerY), radius(radius), color(color) {
         setupTriangles();
         setupVao();
     }

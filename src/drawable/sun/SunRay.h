@@ -8,7 +8,6 @@
 class SunRay : public Drawable {
 private:
     Color color;
-    float sunCenterX, sunCenterY;
 
     void setupTriangles() final override {
         vertices = {
@@ -27,11 +26,11 @@ private:
     }
 
 public:
-    SunRay(float sunCenterX, float sunCenterY, float rotationDeg, Color color) :
-            Drawable(500.0f, 500.0f), sunCenterX(sunCenterX), sunCenterY(sunCenterY), color(color) {
-        setCenterOfRotation(50.0f, 50.0f);
+    SunRay(vec2 sunCenter, float sunRadius, float rotationDeg, Color color) :
+            Drawable(sunCenter.x - sunRadius, sunCenter.y - sunRadius), color(color) {
+        setCenterOfRotation(sunRadius, sunRadius);
         this->rotationAroundCenterDeg = rotationDeg;
-        rotationAround00Deg = 135.0f;
+        rotationAround00Deg = 135.0f; // Fix rotation
         setupTriangles();
         setupVao();
     }

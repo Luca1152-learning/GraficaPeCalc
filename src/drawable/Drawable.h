@@ -31,7 +31,7 @@ protected:
     virtual void setupTriangles() = 0;
 
 public:
-    Drawable(float translateX, float translateY, float scaleX = 1.0f, float scaleY = 1.0f, bool flip = false);
+    Drawable(float translateX = 0.0f, float translateY = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f, bool flip = false);
 
     void setCenterOfRotation(float centerX, float centerY) {
         centerOfRotation = {centerX, centerY};
