@@ -55,14 +55,14 @@ void initializeScene() {
     drawables.push_back(houseA);
 
     House *houseB = new House(
-            450.0f, 375.0f, 0.4f, true,
+            415.0f, 295.0f, 0.37f, true,
             Color::fromHex("#DAC09B"), Color::fromHex("#D3B589"), Color::fromHex("#41494E"), Color::fromHex("#59616C"),
             Color::fromHex("#3C8898"), Color::fromHex("#FBE6BE"), Color::fromHex("#B89A6B"), Color::fromHex("#B89A6B")
     );
     drawables.push_back(houseB);
 
     House *houseC = new House(
-            1100.0f, 380.0f, 0.3f, false,
+            1050.0f, 290.0f, 0.27f, false,
             Color::fromHex("#D7C6A9"), Color::fromHex("#E7D9C1"), Color::fromHex("#9E634B"), Color::fromHex("#B57765"),
             Color::fromHex("#409296"), Color::fromHex("#F8F8EC"), Color::fromHex("#BBA497"), Color::fromHex("#BBA497")
     );
@@ -71,7 +71,14 @@ void initializeScene() {
     Sun *sun = new Sun(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
     drawables.push_back(sun);
 
-    drawables.push_back(new Tree({200.0f, 310.0f}, 0.2f));
+    drawables.push_back(new Tree({200.0f, 310.0f}, 0.18f));
+    drawables.push_back(new Tree({240.0f, 240.0f}, 0.25f));
+    drawables.push_back(new Tree({40.0f, 230.0f}, 0.32f));
+    drawables.push_back(new Tree({340.0f, 285.0f}, 0.16f));
+    drawables.push_back(new Tree({590.0f, 330.0f}, 0.14f));
+    drawables.push_back(new Tree({615.0f, 345.0f}, 0.13f));
+    drawables.push_back(new Tree({1200.0f, 260.0f}, 0.20f));
+    drawables.push_back(new Tree({1240.0f, 245.0f}, 0.20f));
 }
 
 void render() {
