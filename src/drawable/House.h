@@ -29,7 +29,7 @@ private:
     Color doorFrameColor = Color::fromHex("#966D44");
     Color doorKnobColor = Color::fromHex("#EFCF9D");
 
-    void setupTriangles() final;
+    void setupTriangles() final override;
 
 public:
     House(

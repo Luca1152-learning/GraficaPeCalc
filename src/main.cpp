@@ -4,6 +4,7 @@
 #include <vector>
 #include "utils/render/ShadersUtils.h"
 #include "drawable/House.h"
+#include "drawable/Circle.h"
 #include "utils/color/Colors.h"
 
 using namespace glm;
@@ -55,6 +56,16 @@ void initializeScene() {
             Color::fromHex("#3C8898"), Color::fromHex("#FBE6BE"), Color::fromHex("#B89A6B"), Color::fromHex("#B89A6B")
     );
     drawables.push_back(houseB);
+
+    House *houseC = new House(
+            1100.0f, 380.0f, 0.3f, false,
+            Color::fromHex("#D7C6A9"), Color::fromHex("#E7D9C1"), Color::fromHex("#9E634B"), Color::fromHex("#B57765"),
+            Color::fromHex("#409296"), Color::fromHex("#F8F8EC"), Color::fromHex("#BBA497"), Color::fromHex("#BBA497")
+    );
+    drawables.push_back(houseC);
+
+    Circle* circle = new Circle(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
+    drawables.push_back(circle);
 }
 
 void render() {
