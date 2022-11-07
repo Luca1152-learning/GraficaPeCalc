@@ -44,8 +44,10 @@ void initializeShaders() {
 }
 
 void initializeScene() {
+    // Hills
     drawables.push_back(new Hills());
 
+    // House
     House *houseA = new House(
             60.0f, 285.0f, 0.5f, false,
             Color::fromHex("#DEDCDA"), Color::fromHex("#E9E7E8"), Color::fromHex("#7C292E"),
@@ -53,14 +55,12 @@ void initializeScene() {
             Color::fromHex("#966D44"), Color::fromHex("#EFCF9D")
     );
     drawables.push_back(houseA);
-
     House *houseB = new House(
             415.0f, 295.0f, 0.37f, true,
             Color::fromHex("#DAC09B"), Color::fromHex("#D3B589"), Color::fromHex("#41494E"), Color::fromHex("#59616C"),
             Color::fromHex("#3C8898"), Color::fromHex("#FBE6BE"), Color::fromHex("#B89A6B"), Color::fromHex("#B89A6B")
     );
     drawables.push_back(houseB);
-
     House *houseC = new House(
             1050.0f, 290.0f, 0.27f, false,
             Color::fromHex("#D7C6A9"), Color::fromHex("#E7D9C1"), Color::fromHex("#9E634B"), Color::fromHex("#B57765"),
@@ -68,9 +68,11 @@ void initializeScene() {
     );
     drawables.push_back(houseC);
 
+    // Sun
     Sun *sun = new Sun(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
     drawables.push_back(sun);
 
+    // Trees
     drawables.push_back(new Tree({200.0f, 310.0f}, 0.18f));
     drawables.push_back(new Tree({240.0f, 240.0f}, 0.25f));
     drawables.push_back(new Tree({40.0f, 230.0f}, 0.32f));
