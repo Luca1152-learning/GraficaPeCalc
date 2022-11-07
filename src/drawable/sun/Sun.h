@@ -29,9 +29,11 @@ public:
     }
 
     void render() override {
-        Drawable::render();
         circle->render();
         sunRays->render();
+
+        circle->stepAnimation();
+        sunRays->stepAnimation();
     }
 };
 

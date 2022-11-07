@@ -35,6 +35,9 @@ public:
         for (auto sunRay: sunRays) {
             sunRay->render();
         }
+        for (auto sunRay: sunRays) {
+            sunRay->stepAnimation();
+        }
     }
 };
 
