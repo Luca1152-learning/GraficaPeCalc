@@ -48,8 +48,7 @@ void Drawable::render() {
 
     mat4 resultingMatrix =
             resizeMatrix * translateToXYMatrix * scaleMatrix * flipMatrix * translateFromCenterOfRotationTo00Matrix *
-            rotationAroundCenterOfRotationMatrix * translateToCenterOfRotationMatrix * rotationAround00Matrix *
-            translateTo00Matrix;
+            rotationAroundCenterOfRotationMatrix * translateToCenterOfRotationMatrix * rotationAround00Matrix;
 
     glUniformMatrix4fv(Constants::MATRIX_LOCATION, 1, GL_FALSE, &resultingMatrix[0][0]);
 

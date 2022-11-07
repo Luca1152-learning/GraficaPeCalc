@@ -5,6 +5,7 @@
 #include "utils/render/ShadersUtils.h"
 #include "drawable/House.h"
 #include "drawable/Tree.h"
+#include "drawable/Hills.h"
 #include "drawable/sun/Sun.h"
 #include "utils/color/Colors.h"
 
@@ -43,8 +44,10 @@ void initializeShaders() {
 }
 
 void initializeScene() {
+    drawables.push_back(new Hills());
+
     House *houseA = new House(
-            100.0f, 350.0f, 0.7f, false,
+            60.0f, 285.0f, 0.5f, false,
             Color::fromHex("#DEDCDA"), Color::fromHex("#E9E7E8"), Color::fromHex("#7C292E"),
             Color::fromHex("#BA4C40"), Color::fromHex("#458592"), Color::fromHex("#C5A671"),
             Color::fromHex("#966D44"), Color::fromHex("#EFCF9D")
@@ -68,7 +71,7 @@ void initializeScene() {
     Sun *sun = new Sun(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
     drawables.push_back(sun);
 
-    drawables.push_back(new Tree({250.0f, 400.0f}, 0.25f));
+    drawables.push_back(new Tree({200.0f, 310.0f}, 0.2f));
 }
 
 void render() {
