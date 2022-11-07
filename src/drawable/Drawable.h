@@ -18,20 +18,21 @@ protected:
     Matrix triangleVertices;
     Matrix triangleVerticesColors;
 
-    vec2 translate;
-    vec2 centerOfRotation;
+    vec2 translate = {0, 0};
+    vec2 centerOfRotation = {0, 0};
     float rotationAround00Deg = 0.0f, rotationAroundCenterDeg = 0.0f;
-    vec2 scale;
-    bool flip;
+    vec2 scale = {0, 0};
+    bool flip = false;
 
     GLuint vao, verticesVbo, colorsVbo;
 
     void setupVao();
 
-    virtual void setupTriangles() = 0;
+    virtual void setupShape() = 0;
 
 public:
-    Drawable(float translateX = 0.0f, float translateY = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f, bool flip = false);
+    Drawable(float translateX = 0.0f, float translateY = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f,
+             bool flip = false);
 
     void setCenterOfRotation(float centerX, float centerY) {
         centerOfRotation = {centerX, centerY};

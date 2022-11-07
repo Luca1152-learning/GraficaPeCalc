@@ -9,7 +9,7 @@ class SunRay : public Drawable {
 private:
     Color color;
 
-    void setupTriangles() final override {
+    void setupShape() final override {
         vertices = {
                 {0.0f,  0.0f}, // 0
                 {15.0f, 0.0f}, // 1
@@ -31,7 +31,7 @@ public:
         setCenterOfRotation(sunRadius, sunRadius);
         this->rotationAroundCenterDeg = rotationDeg;
         rotationAround00Deg = 135.0f; // Fix rotation
-        setupTriangles();
+        setupShape();
         setupVao();
     }
 };

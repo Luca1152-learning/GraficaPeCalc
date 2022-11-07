@@ -4,7 +4,7 @@
 
 #include "House.h"
 
-void House::setupTriangles() {
+void House::setupShape() {
     vertices = {
             {0.0f,   0.0f}, // 0
             {25.0f,  0.0f}, // 1
@@ -133,6 +133,6 @@ House::House(
         Drawable(centerX, centerY, scale, scale, flip),
         sideWallColor(sideWallColor), wallColor(wallColor), roofGutterColor(roofGutterColor), roofColor(roofColor),
         windowColor(windowColor), doorColor(doorColor), doorFrameColor(doorFrameColor), doorKnobColor(doorKnobColor) {
-    setupTriangles();
+    setupShape();
     setupVao();
 }

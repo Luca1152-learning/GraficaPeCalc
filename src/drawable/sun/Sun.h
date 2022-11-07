@@ -16,7 +16,7 @@ private:
     Circle *circle;
     SunRays *sunRays;
 
-    void setupTriangles() final override {
+    void setupShape() final override {
         circle = new Circle(center.x, center.y, radius, color);
         sunRays = new SunRays(center, radius, color);
     }
@@ -24,7 +24,7 @@ private:
 public:
     Sun(float centerX, float centerY, float radius, Color color) :
             center(centerX, centerY), radius(radius), color(color) {
-        setupTriangles();
+        setupShape();
         setupVao();
     }
 

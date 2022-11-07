@@ -11,7 +11,7 @@ class Circle : public Drawable {
 private:
     Color color;
 
-    void setupTriangles() final override;
+    void setupShape() final override;
 
 public:
     Circle(float centerX, float centerY, float radius, Color color);

@@ -1,6 +1,6 @@
 #include "Circle.h"
 
-void Circle::setupTriangles() {
+void Circle::setupShape() {
     vector<Vector> triangleVerticesVec;
     vector<Vector> triangleVerticesColorsVec;
 
@@ -26,6 +26,6 @@ void Circle::setupTriangles() {
 
 Circle::Circle(float centerX, float centerY, float radius, Color color) :
         Drawable(centerX, centerY, radius, radius), color(color) {
-    setupTriangles();
+    setupShape();
     setupVao();
 }

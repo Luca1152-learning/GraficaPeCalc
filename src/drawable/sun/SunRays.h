@@ -14,7 +14,7 @@ private:
 
     vector<SunRay *> sunRays;
 
-    void setupTriangles() final override {
+    void setupShape() final override {
         sunRays.push_back(new SunRay(sunCenter, sunRadius, 0.0f, color));
         sunRays.push_back(new SunRay(sunCenter, sunRadius, 45.0f, color));
         sunRays.push_back(new SunRay(sunCenter, sunRadius, 90.0f, color));
@@ -27,7 +27,7 @@ private:
 
 public:
     SunRays(vec2 sunCenter, float sunRadius, Color color) : sunCenter(sunCenter), sunRadius(sunRadius), color(color) {
-        setupTriangles();
+        setupShape();
     }
 
     void render() override {
