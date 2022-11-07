@@ -4,6 +4,7 @@
 #include <vector>
 #include "utils/render/ShadersUtils.h"
 #include "drawable/House.h"
+#include "drawable/Tree.h"
 #include "drawable/sun/Sun.h"
 #include "utils/color/Colors.h"
 
@@ -66,6 +67,9 @@ void initializeScene() {
 
     Sun *sun = new Sun(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
     drawables.push_back(sun);
+
+    Tree* tree1 = new Tree({250.0f, 200.0f}, 1.0f);
+    drawables.push_back(tree1);
 }
 
 void render() {
