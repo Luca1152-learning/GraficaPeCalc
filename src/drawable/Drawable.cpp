@@ -27,17 +27,29 @@ void Drawable::setupVao() {
     glBindVertexArray(0);
 }
 
-Drawable::Drawable(float centerX, float centerY, float scaleX, float scaleY, bool flip) :
-        centerX(centerX), centerY(centerY), scaleX(scaleX), scaleY(scaleY), flip(flip) {
+Drawable::Drawable(float translateX, float translateY, float scaleX, float scaleY, bool flip) :
+        translate({translateX, translateY}), scale({scaleX, scaleY}), flip(flip) {
 }
 
 void Drawable::render() {
+    mat4 translateTo00Matrix = glm::translate(mat4(1.0f), -(vec3) triangleVertices.getCenter());
+    mat4 rotationAround00Matrix = glm::rotate(mat4(1.0f), radians(rotationAround00Deg), vec3(0.0f, 0.0f, 1.0f));
+    mat4 translateToCenterOfRotationMatrix = glm::translate(mat4(1.0f), -vec3(centerOfRotation, 0.0f));
+    mat4 rotationAroundCenterOfRotationMatrix = glm::rotate(
+            mat4(1.0f), radians(rotationAroundCenterDeg), vec3(0.0f, 0.0f, 1.0f)
+    );
+    mat4 translateFromCenterOfRotationTo00Matrix = glm::translate(
+            mat4(1.0f), vec3(centerOfRotation, 0.0f)
+    );
+    mat4 flipMatrix = flip ? glm::rotate(mat4(1.0f), radians(180.0f), vec3(0.0f, 1.0f, 0.0f)) : mat4(1.0f);
+    mat4 scaleMatrix = glm::scale(mat4(1.0f), vec3(scale, 0.0f));
+    mat4 translateToXYMatrix = glm::translate(mat4(1.0f), vec3(translate, 0.0f));
     mat4 resizeMatrix = Constants::RESIZE_MATRIX;
-    mat4 translateTo00Matrix = translate(mat4(1.0f), -(vec3) triangleVertices.getCenter());
-    mat4 translateToXYMatrix = translate(mat4(1.0f), vec3(centerX, centerY, 0.0f));
-    mat4 scaleMatrix = scale(mat4(1.0f), vec3(scaleX, scaleY, 0.0f));
-    mat4 flipMatrix = flip ? rotate(mat4(1.0f), radians(180.0f), vec3(0.0f, 1.0f, 0.0f)) : mat4(1.0f);
-    mat4 resultingMatrix = resizeMatrix * translateToXYMatrix * scaleMatrix * flipMatrix * translateTo00Matrix;
+
+    mat4 resultingMatrix =
+            resizeMatrix * translateToXYMatrix * scaleMatrix * flipMatrix * translateFromCenterOfRotationTo00Matrix *
+            rotationAroundCenterOfRotationMatrix * translateToCenterOfRotationMatrix * rotationAround00Matrix *
+            translateTo00Matrix;
 
     glUniformMatrix4fv(Constants::MATRIX_LOCATION, 1, GL_FALSE, &resultingMatrix[0][0]);
 

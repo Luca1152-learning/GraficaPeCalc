@@ -16,8 +16,8 @@ private:
     SunRays *sunRays;
 
     void setupTriangles() final override {
-        circle = new Circle(centerX, centerY, radius, color);
-        sunRays = new SunRays(centerX, centerY, color);
+        circle = new Circle(translate[0], translate[1], radius, color);
+        sunRays = new SunRays(translate[0], translate[1], color);
     }
 
 public:

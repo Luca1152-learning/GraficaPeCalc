@@ -64,7 +64,7 @@ void initializeScene() {
     );
     drawables.push_back(houseC);
 
-    Sun* sun = new Sun(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
+    Sun *sun = new Sun(150.0f, 600.0f, 55.0f, Color::fromHex("#E5D47C"));
     drawables.push_back(sun);
 }
 

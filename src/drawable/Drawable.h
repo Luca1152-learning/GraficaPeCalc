@@ -10,7 +10,6 @@
 #include "../utils/Constants.h"
 #include <iostream>
 
-using namespace glm;
 using namespace std;
 
 class Drawable {
@@ -19,7 +18,10 @@ protected:
     Matrix triangleVertices;
     Matrix triangleVerticesColors;
 
-    float centerX, centerY, scaleX, scaleY;
+    vec2 translate;
+    vec2 centerOfRotation;
+    float rotationAround00Deg = 0.0f, rotationAroundCenterDeg = 0.0f;
+    vec2 scale;
     bool flip;
 
     GLuint vao, verticesVbo, colorsVbo;
@@ -29,7 +31,11 @@ protected:
     virtual void setupTriangles() = 0;
 
 public:
-    Drawable(float centerX, float centerY, float scaleX = 1.0f, float scaleY = 1.0f, bool flip = false);
+    Drawable(float translateX, float translateY, float scaleX = 1.0f, float scaleY = 1.0f, bool flip = false);
+
+    void setCenterOfRotation(float centerX, float centerY) {
+        centerOfRotation = {centerX, centerY};
+    }
 
     virtual void render();
 };
