@@ -89,6 +89,9 @@ void initializeScene() {
     drawables.push_back(new Tree({1200.0f, 260.0f}, 0.20f));
     drawables.push_back(new Tree({1240.0f, 245.0f}, 0.20f));
 
+    // Clouds
+
+
     // Sea
     drawables.push_back(new Sea());
 }

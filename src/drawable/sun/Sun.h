@@ -16,25 +16,12 @@ private:
     Circle *circle;
     SunRays *sunRays;
 
-    void setupShape() final override {
-        circle = new Circle(center.x, center.y, radius, color);
-        sunRays = new SunRays(center, radius, color);
-    }
+    void setupShape() final override;
 
 public:
-    Sun(float centerX, float centerY, float radius, Color color) :
-            center(centerX, centerY), radius(radius), color(color) {
-        setupShape();
-        setupVao();
-    }
+    Sun(float centerX, float centerY, float radius, Color color);
 
-    void render() override {
-        circle->render();
-        sunRays->render();
-
-        circle->stepAnimation();
-        sunRays->stepAnimation();
-    }
+    void render() override;
 };
 
 
