@@ -6,6 +6,7 @@
 #include "drawable/House.h"
 #include "drawable/Tree.h"
 #include "drawable/Hills.h"
+#include "drawable/Sea.h"
 #include "drawable/sun/Sun.h"
 #include "utils/color/Colors.h"
 
@@ -81,6 +82,9 @@ void initializeScene() {
     drawables.push_back(new Tree({615.0f, 345.0f}, 0.13f));
     drawables.push_back(new Tree({1200.0f, 260.0f}, 0.20f));
     drawables.push_back(new Tree({1240.0f, 245.0f}, 0.20f));
+
+    // Sea
+    drawables.push_back(new Sea());
 }
 
 void render() {
