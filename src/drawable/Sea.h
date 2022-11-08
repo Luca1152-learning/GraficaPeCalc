@@ -7,8 +7,8 @@
 
 class Sea : public Drawable {
 private:
-    Color darkBlue = Color::fromHex("#68ADC3");
-    Color lightBlue = Color::fromHex("#85C9CC");
+    Color lightBlue = Color::fromHex("#70CDCF");
+    Color darkBlue = Color::fromHex("#4FAFCA");
 
     bool increaseHeight = true;
 

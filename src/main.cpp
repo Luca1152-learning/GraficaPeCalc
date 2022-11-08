@@ -7,6 +7,7 @@
 #include "drawable/Tree.h"
 #include "drawable/Hills.h"
 #include "drawable/Sea.h"
+#include "drawable/Cloud.h"
 #include "drawable/sun/Sun.h"
 #include "utils/color/Colors.h"
 
@@ -89,11 +90,23 @@ void initializeScene() {
     drawables.push_back(new Tree({1200.0f, 260.0f}, 0.20f));
     drawables.push_back(new Tree({1240.0f, 245.0f}, 0.20f));
 
-    // Clouds
-
-
     // Sea
     drawables.push_back(new Sea());
+
+    // Clouds
+    drawables.push_back(new Cloud({20.0f, 450.0f}, 130.0f));
+    drawables.push_back(new Cloud({100.0f, 620.0f}, 190.0f));
+    drawables.push_back(new Cloud({300.0f, 490.0f}, 120.0f));
+    drawables.push_back(new Cloud({450.0f, 400.0f}, 160.0f));
+    drawables.push_back(new Cloud({560.0f, 570.0f}, 250.0f));
+    drawables.push_back(new Cloud({500.0f, 700.0f}, 180.0f));
+    drawables.push_back(new Cloud({800.0f, 470.0f}, 150.0f));
+    drawables.push_back(new Cloud({920.0f, 620.0f}, 180.0f));
+    drawables.push_back(new Cloud({1000.0f, 380.0f}, 130.0f));
+    drawables.push_back(new Cloud({1100.0f, 570.0f}, 120.0f));
+    drawables.push_back(new Cloud({1200.0f, 490.0f}, 150.0f));
+    drawables.push_back(new Cloud({1300.0f, 400.0f}, 120.0f));
+    drawables.push_back(new Cloud({1400.0f, 670.0f}, 170.0f));
 }
 
 void render() {
