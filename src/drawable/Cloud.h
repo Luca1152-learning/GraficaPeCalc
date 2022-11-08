@@ -16,57 +16,14 @@ private:
     Circle *circleLeft;
     Circle *circleRight;
 
-    void setupShape() final override {
-        // Circles
-        circleLeft = new Circle(translate.x + height / 2.0f, translate.y + height / 2.0f, height / 2.0f, color);
-        circleRight = new Circle(translate.x + width - height / 2.0f, translate.y + height / 2.0f, height / 2.0f,
-                                 color);
-
-        // Connecting the two circles
-        vertices = {
-                {0.0f + height / 2.0f,  0.0f}, // 0
-                {width - height / 2.0f, 0.0f}, // 1
-                {width - height / 2.0f, height}, // 2
-                {0 + height / 2.0f,     height}, // 3
-        };
-        triangleVertices = {
-                4,
-                {
-                        vertices[0], vertices[1], vertices[2],
-                        vertices[0], vertices[2], vertices[3],
-                }
-        };
-        triangleVerticesColors = {
-                4,
-                {
-                        color, color, color,
-                        color, color, color,
-                }
-        };
-    }
+    void setupShape() final override;
 
 public:
-    Cloud(vec2 center, float width) : Drawable(), width(width) {
-        translate = {center.x, center.y};
-        setupShape();
-        setupVao();
-    }
+    Cloud(vec2 center, float width);
 
-    void render() override {
-        Drawable::render();
-        circleLeft->render();
-        circleRight->render();
-    }
+    void render() override;
 
-    void stepAnimation() override {
-        translate.x -= speed;
-        circleLeft->setTranslate({translate.x + height / 2.0f, translate.y + height / 2.0f});
-        circleRight->setTranslate({translate.x + width - height / 2.0f, translate.y + height / 2.0f});
-
-        if (translate.x <= -width) {
-            translate.x = 1280.0f;
-        }
-    }
+    void stepAnimation() override;
 };
 
 
