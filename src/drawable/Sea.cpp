@@ -27,8 +27,8 @@ void Sea::setupShape() {
             {
                     lightBlue, lightBlue, lightBlue,
                     lightBlue, lightBlue, lightBlue,
-                    mediumBlue, mediumBlue, mediumBlue,
-                    mediumBlue, mediumBlue, mediumBlue,
+                    lightBlue, lightBlue, darkBlue,
+                    lightBlue, darkBlue, darkBlue,
                     darkBlue, darkBlue, darkBlue,
                     darkBlue, darkBlue, darkBlue,
             }
