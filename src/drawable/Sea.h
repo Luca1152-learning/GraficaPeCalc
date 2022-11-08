@@ -11,19 +11,18 @@ private:
     Color mediumBlue = Color::fromHex("#70B8C6");
     Color lightBlue = Color::fromHex("#85C9CC");
 
-    float rowHeight = 65.0f;
-    bool increaseRowHeight = true;
+    bool increaseHeight = true;
 
     void setupShape() final override {
         vertices = {
                 {0.0f,    0.0f}, // 0
                 {1280.0f, 0.0f}, // 1
-                {1280.0f, rowHeight}, // 2
-                {0.0f,    rowHeight}, // 3
-                {1280.0f, 2 * rowHeight}, // 4
-                {0.0f,    2 * rowHeight}, // 5
-                {1280.0f, 3 * rowHeight}, // 6
-                {0.0f,    3 * rowHeight}, // 7
+                {1280.0f, 65.0f}, // 2
+                {0.0f,    65.0f}, // 3
+                {1280.0f, 130.0f}, // 4
+                {0.0f,    130.0f}, // 5
+                {1280.0f, 195.0f}, // 6
+                {0.0f,    195.0f}, // 7
         };
         triangleVertices = {
                 4,
@@ -56,19 +55,17 @@ public:
     }
 
     void stepAnimation() override {
-        if (increaseRowHeight) {
-            rowHeight += 0.05f;
-            if (rowHeight >= 70.0f) {
-                increaseRowHeight = false;
+        if (increaseHeight) {
+            scale.y += 0.0015f;
+            if (scale.y >= 1.1f) {
+                increaseHeight = false;
             }
         } else {
-            rowHeight -= 0.05f;
-            if (rowHeight <= 65.0f) {
-                increaseRowHeight = true;
+            scale.y -= 0.0015f;
+            if (scale.y <= 1.0f) {
+                increaseHeight = true;
             }
         }
-        setupShape();
-        setupVao();
     }
 };
 
