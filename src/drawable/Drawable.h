@@ -40,10 +40,6 @@ public:
 
     virtual void stepAnimation();
 
-    const vec2 &getTranslate() const {
-        return translate;
-    }
-
     void setTranslate(const vec2 &translate) {
         this->translate = translate;
     }
