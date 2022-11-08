@@ -32,7 +32,6 @@ Drawable::Drawable(float translateX, float translateY, float scaleX, float scale
 }
 
 void Drawable::render() {
-    mat4 translateTo00Matrix = glm::translate(mat4(1.0f), -(vec3) triangleVertices.getCenter());
     mat4 rotationAround00Matrix = glm::rotate(mat4(1.0f), radians(rotationAround00Deg), vec3(0.0f, 0.0f, 1.0f));
     mat4 translateToCenterOfRotationMatrix = glm::translate(mat4(1.0f), -vec3(centerOfRotation, 0.0f));
     mat4 rotationAroundCenterOfRotationMatrix = glm::rotate(
