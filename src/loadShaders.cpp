@@ -1,8 +1,8 @@
 //  Preluat si adaptat dupa http://www.opengl-tutorial.org/beginners-tutorials 
 
 
-#include "GL/glew.h"
-#include "GL/freeglut.h"
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 
 #include <string>
 #include <fstream>
