@@ -1,85 +1,111 @@
-// Codul sursa este adaptat dupa OpenGLBook.com
-
+/* INDEXARE
+Elemente de noutate:
+   - folosirea indexarii varfurilor: elemente asociate (matrice, buffer)
+   - desenarea se face folosind functia glDrawElements()
+   */
 #include <windows.h>  // biblioteci care urmeaza sa fie incluse
 #include <stdlib.h> // necesare pentru citirea shader-elor
 #include <stdio.h>
+#include <math.h>
+#include <iostream>
 #include <GL/glew.h> // glew apare inainte de freeglut
 #include <GL/freeglut.h> // nu trebuie uitat freeglut.h
+
 #include "loadShaders.h"
 
+#include "glm/glm.hpp"  
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+
+using namespace std;
 
 //////////////////////////////////////
 
 GLuint
 VaoId,
 VboId,
+EboId,
 ColorBufferId,
-ProgramId;
+ProgramId,
+myMatrixLocation;
 
+float width = 80.f, height = 60.f;
+glm::mat4
+myMatrix, resizeMatrix = glm::ortho(-width, width, -height, height);
 
 void CreateVBO(void)
 {
-	// varfurile 
-	GLfloat Vertices[] = {
-		0.5f,  0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		0.5f,  0.5f, 0.0f, 1.0f
+	// coordonatele varfurilor
+	static const GLfloat vf_pos[] =
+	{
+	-5.0f, -5.0f, 0.0f, 1.0f,
+	 5.0f,  -5.0f, 0.0f, 1.0f,
+	 5.0f,  5.0f, 0.0f, 1.0f,
+	-5.0f,  5.0f, 0.0f, 1.0f,
+
+	};
+	// culorile varfurilor
+	static const GLfloat vf_col[] =
+	{
+	1.0f, 0.0f, 0.0f, 1.0f,
+	0.0f, 1.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f, 1.0f,
+	1.0f, 0.0f, 1.0f, 1.0f,
+	};
+	// indici pentru trasarea unor primitive
+	static const GLuint vf_ind[] =
+	{
+	0, 1, 2, 3, 0, 2
 	};
 
-	// culorile, ca atribute ale varfurilor
-	GLfloat Colors[] = {
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	  1.0f, 0.5f, 0.2f, 1.0f,
-	};
-
-	// se creeaza un buffer nou
+	// se creeaza un buffer nou pentru varfuri
 	glGenBuffers(1, &VboId);
-	// este setat ca buffer curent
-	glBindBuffer(GL_ARRAY_BUFFER, VboId);
-	// varfurile sunt "copiate" in bufferul curent
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
-
-	// se creeaza / se leaga un VAO (Vertex Array Object) - util cand se utilizeaza mai multe VBO
+	// buffer pentru indici
+	glGenBuffers(1, &EboId);
+	// se creeaza / se leaga un VAO (Vertex Array Object)
 	glGenVertexArrays(1, &VaoId);
-	glBindVertexArray(VaoId);
-	// se activeaza lucrul cu atribute; atributul 0 = pozitie
-	glEnableVertexAttribArray(0);
-	// 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-	// un nou buffer, pentru culoare
-	glGenBuffers(1, &ColorBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Colors), Colors, GL_STATIC_DRAW);
-	// atributul 1 =  culoare
+	// legare VAO
+	glBindVertexArray(VaoId);
+
+	// buffer-ul este setat ca buffer curent
+	glBindBuffer(GL_ARRAY_BUFFER, VboId);
+
+	// buffer-ul va contine atat coordonatele varfurilor, cat si datele de culoare
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vf_col) + sizeof(vf_pos), NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vf_pos), vf_pos);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(vf_pos), sizeof(vf_col), vf_col);
+
+	// buffer-ul pentru indici
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EboId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vf_ind), vf_ind, GL_STATIC_DRAW);
+
+	// se activeaza lucrul cu atribute; atributul 0 = pozitie, atributul 1 = culoare, acestea sunt indicate corect in VBO
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)sizeof(vf_pos));
+	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
 }
 void DestroyVBO(void)
 {
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
-
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDeleteBuffers(1, &EboId);
 	glDeleteBuffers(1, &ColorBufferId);
 	glDeleteBuffers(1, &VboId);
-
 	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &VaoId);
 }
 
 void CreateShaders(void)
 {
-	ProgramId = LoadShaders("example.vert", "example.frag");
+	ProgramId = LoadShaders("06_02_Shader.vert", "06_02_Shader.frag");
 	glUseProgram(ProgramId);
 }
+
 void DestroyShaders(void)
 {
 	glDeleteProgram(ProgramId);
@@ -87,18 +113,18 @@ void DestroyShaders(void)
 
 void Initialize(void)
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // culoarea de fond a ecranului
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	CreateVBO();
 	CreateShaders();
+	myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
 }
 void RenderFunction(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT);       
-
-	// Functiile de desenare
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDrawArrays(GL_TRIANGLES, 3, 3);
-
+	glClear(GL_COLOR_BUFFER_BIT);
+	myMatrix = resizeMatrix;
+	glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(0));
+	// De realizat desenul folosind segmente de dreapta
 	glFlush();
 }
 void Cleanup(void)
@@ -111,10 +137,10 @@ int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-	glutInitWindowPosition(100, 100); // pozitia initiala a ferestrei
-	glutInitWindowSize(600, 600); //dimensiunile ferestrei
-	glutCreateWindow("Grafica pe calculator - primul exemplu"); // titlul ferestrei
-	glewInit(); // nu uitati de initializare glew; trebuie initializat inainte de a a initializa desenarea
+	glutInitWindowPosition(100, 100);
+	glutInitWindowSize(800, 600);
+	glutCreateWindow("Utilizarea indexarii varfurilor");
+	glewInit();
 	Initialize();
 	glutDisplayFunc(RenderFunction);
 	glutCloseFunc(Cleanup);

@@ -472,6 +472,7 @@ cd "$(ProjectDir)/lib/x64/SOIL" &amp; xcopy /c /y *.dll *.lib</Command>
   <ItemGroup>
     <None Include="example.frag" />
     <None Include="example.vert" />
+    <None Include=".gitignore" />
     <None Include="include\glm\detail\func_common.inl" />
     <None Include="include\glm\detail\func_common_simd.inl" />
     <None Include="include\glm\detail\func_exponential.inl" />
