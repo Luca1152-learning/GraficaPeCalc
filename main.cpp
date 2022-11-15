@@ -37,26 +37,26 @@ myMatrix, resizeMatrix = glm::ortho(-width, width, -height, height);
 void CreateVBO(void)
 {
 	// coordonatele varfurilor
-	static const GLfloat vf_pos[] =
+	GLfloat vf_pos[] =
 	{
-	-5.0f, -5.0f, 0.0f, 1.0f,
-	 5.0f,  -5.0f, 0.0f, 1.0f,
-	 5.0f,  5.0f, 0.0f, 1.0f,
-	-5.0f,  5.0f, 0.0f, 1.0f,
-
+		-5.0f, -5.0f, 0.0f, 1.0f,
+		 5.0f,  -5.0f, 0.0f, 1.0f,
+		 5.0f,  5.0f, 0.0f, 1.0f,
+		-5.0f,  5.0f, 0.0f, 1.0f,
 	};
 	// culorile varfurilor
-	static const GLfloat vf_col[] =
+	GLfloat vf_col[] =
 	{
-	1.0f, 0.0f, 0.0f, 1.0f,
-	0.0f, 1.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f, 1.0f,
-	1.0f, 0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
 	};
 	// indici pentru trasarea unor primitive
 	static const GLuint vf_ind[] =
 	{
-	0, 1, 2, 3, 0, 2
+	0, 1, 2, 
+	3, 0, 2
 	};
 
 	// se creeaza un buffer nou pentru varfuri
@@ -120,10 +120,11 @@ void Initialize(void)
 }
 void RenderFunction(void)
 {
+	glLineWidth(1.5f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	myMatrix = resizeMatrix;
 	glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(0));
+	glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, (void*)(0));
 	// De realizat desenul folosind segmente de dreapta
 	glFlush();
 }
