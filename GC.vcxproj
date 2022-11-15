@@ -93,7 +93,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)/lib/x32/GLFW/glfw3.lib;$(ProjectDir)/lib/x32/GLFW/glfw3_mt.lib;$(ProjectDir)/lib/x32/GLFW/glfw3dll.lib;$(ProjectDir)/lib/x32/GL/freeglut.lib;$(ProjectDir)/lib/x32/GL/glew32.lib;$(ProjectDir)/lib/x32/GL/glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)/lib/x32/GLFW/glfw3.lib;$(ProjectDir)/lib/x32/GLFW/glfw3_mt.lib;$(ProjectDir)/lib/x32/GLFW/glfw3dll.lib;$(ProjectDir)/lib/x32/GL/freeglut.lib;$(ProjectDir)/lib/x32/GL/glew32.lib;$(ProjectDir)/lib/x32/GL/glew32s.lib;C:\Users\tluca\Desktop\GC\SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d  "$(ProjectDir)lib\x32\GL\DLLs\*.dll" "$(OutDir)" &amp;
@@ -626,6 +626,9 @@ cd "$(ProjectDir)/lib/x64/SOIL" &amp; xcopy /c /y *.dll *.lib</Command>
     <None Include="lib\x64\GL\glew32.dll" />
     <None Include="lib\x64\GL\glew32s.dll" />
     <None Include="lib\x64\SOIL\SOIL.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\Downloads\Coduri sursa\SOIL.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

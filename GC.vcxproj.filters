@@ -1474,4 +1474,7 @@
       <Filter>Header Files\template-built-ins\glm\gtx</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\Downloads\Coduri sursa\SOIL.lib" />
+  </ItemGroup>
 </Project>
