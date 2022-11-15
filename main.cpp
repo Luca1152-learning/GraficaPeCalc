@@ -44,18 +44,18 @@ void CreateVBO(void)
 	// coordonatele varfurilor
 	static const GLfloat Vertices[] =
 	{
-	// coordonate,                culori,                      coordonate de texturare,
-	-5.0f, -5.0f, 0.0f, 1.0f,     1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 0.0f, // stanga jos
-	 5.0f,  -5.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,      1.0f, 0.0f,  // dreapta jos
-	 5.0f,  5.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f, 1.0f,      1.0f, 1.0f, // dreapta sus
-	-5.0f,  5.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f  // stanga sus
+	// coordonate,                culori,               coordonate de texturare,
+	-5.0f, -5.0f, 0.0f, 1.0f,     1.0f, 0.0f, 0.0f,     0.0f, 0.0f,  // 0 stanga jos
+	 5.0f,  -5.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f,     1.0f, 0.0f,  // 1 dreapta jos
+	 5.0f,  5.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 1.0f,  // 2 dreapta sus
+	-5.0f,  5.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f,     0.0f, 1.0f   // 3 stanga sus
 	};
 
 	// indici pentru trasarea unor primitive
 	static const GLuint Indices[] =
 	{
 	  0, 1, 2, // Primul triunghi
-	  3, 0, 2, //  Al doilea triunghi
+	  0, 2, 3, //  Al doilea triunghi
 	};
 
 	// se creeaza un VAO (Vertex Array Object) - util cand se utilizeaza mai multe VBO
