@@ -15,7 +15,7 @@ void main(void) {
 			out_Color = ex_Color;
 			break;
 		case 1:
-			out_Color = mix(texture(myTexture, tex_Coord), ex_Color, 0.2);
+			out_Color = mix(texture(myTexture, tex_Coord), ex_Color, 0.0);
 			break;
 		default:
 			out_Color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
