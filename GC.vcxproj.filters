@@ -1473,11 +1473,5 @@
     <None Include="include\glm\gtx\wrap.inl">
       <Filter>Header Files\template-built-ins\glm\gtx</Filter>
     </None>
-    <None Include="example.vert">
-      <Filter>Resource Files\shaders\example</Filter>
-    </None>
-    <None Include="example.frag">
-      <Filter>Resource Files\shaders\example</Filter>
-    </None>
   </ItemGroup>
 </Project>
