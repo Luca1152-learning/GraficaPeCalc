@@ -35,24 +35,66 @@ float width = 80.f, height = 60.f;
 glm::mat4
 myMatrix, resizeMatrix = glm::ortho(-width, width, -height, height);
 
+
+vector<GLfloat> varfuri, culori;
+vector<GLuint> indici;
+
+const int n = 10;
+const GLfloat radiuses[] = { 10.0f, 20.0f };
+
 void CreateVBO(void)
 {
-	vector<GLfloat> varfuri = {
-		-5.0f, -5.0f, 0.0f, 1.0f,
-		 5.0f,  -5.0f, 0.0f, 1.0f,
-		 5.0f,  5.0f, 0.0f, 1.0f,
-		-5.0f,  5.0f, 0.0f, 1.0f,
-	};
-	vector<GLfloat> culori = {
-		0.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-	};
-	vector<GLuint> indici = {
-		0, 1, 2,
-		3, 0, 2
-	};
+	for (int i = 0; i < 2; i++) {
+		GLfloat radius = radiuses[i];
+		for (int k = 0; k < n; k++) {
+			GLfloat x, y;
+
+			GLfloat angleRad = 2 * k * glm::pi<GLfloat>() / n;
+			x = radius * glm::cos(angleRad);
+			y = radius * glm::sin(angleRad);
+
+			// Varfuri
+			varfuri.push_back(x);
+			varfuri.push_back(y);
+			varfuri.push_back(0.0f);
+			varfuri.push_back(1.0f);
+
+			// Culoare
+			culori.push_back(0.0f);
+			culori.push_back(0.0f);
+			culori.push_back(0.0f);
+			culori.push_back(1.0f);
+		}
+	}
+
+	// Indici - cerc mic
+	for (int i = 0; i < n - 1; i++) {
+		indici.push_back(i);
+		indici.push_back(i + 1);
+	}
+	indici.push_back(n - 1);
+	indici.push_back(0);
+
+
+	// Indici - cerc mare
+	for (int i = n; i < 2 * n - 1; i++) {
+		indici.push_back(i);
+		indici.push_back(i + 1);
+	}
+	indici.push_back(2 * n - 1);
+	indici.push_back(n);
+
+	// Indici - legaturi cerc mic->cerc mare
+	for (int i = 0; i < n; i++) {
+		indici.push_back(i);
+		indici.push_back(n + i);
+	}
+	for (int i = 1; i < n; i++) {
+		indici.push_back(i);
+		indici.push_back(n + i - 1);
+	}
+	indici.push_back(0);
+	indici.push_back(2 * n - 1);
 
 	GLfloat* vf_pos = varfuri.data();
 	GLfloat* vf_col = culori.data();
@@ -78,7 +120,7 @@ void CreateVBO(void)
 
 	// buffer-ul pentru indici
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EboId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indici.size() * sizeof(GLfloat), vf_ind, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indici.size() * sizeof(GLuint), vf_ind, GL_STATIC_DRAW);
 
 	// se activeaza lucrul cu atribute; atributul 0 = pozitie, atributul 1 = culoare, acestea sunt indicate corect in VBO
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -123,7 +165,7 @@ void RenderFunction(void)
 	glClear(GL_COLOR_BUFFER_BIT);
 	myMatrix = resizeMatrix;
 	glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
-	glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, (void*)(0));
+	glDrawElements(GL_LINES, indici.size(), GL_UNSIGNED_INT, (void*)(0));
 	// De realizat desenul folosind segmente de dreapta
 	glFlush();
 }
