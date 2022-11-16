@@ -17,6 +17,7 @@ Elemente de noutate:
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include <vector>
 
 using namespace std;
 
@@ -36,28 +37,26 @@ myMatrix, resizeMatrix = glm::ortho(-width, width, -height, height);
 
 void CreateVBO(void)
 {
-	// coordonatele varfurilor
-	GLfloat vf_pos[] =
-	{
+	vector<GLfloat> varfuri = {
 		-5.0f, -5.0f, 0.0f, 1.0f,
 		 5.0f,  -5.0f, 0.0f, 1.0f,
 		 5.0f,  5.0f, 0.0f, 1.0f,
 		-5.0f,  5.0f, 0.0f, 1.0f,
 	};
-	// culorile varfurilor
-	GLfloat vf_col[] =
-	{
+	vector<GLfloat> culori = {
 		0.0f, 0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 0.0f, 1.0f,
 	};
-	// indici pentru trasarea unor primitive
-	static const GLuint vf_ind[] =
-	{
-	0, 1, 2, 
-	3, 0, 2
+	vector<GLuint> indici = {
+		0, 1, 2,
+		3, 0, 2
 	};
+
+	GLfloat* vf_pos = varfuri.data();
+	GLfloat* vf_col = culori.data();
+	GLuint* vf_ind = indici.data();
 
 	// se creeaza un buffer nou pentru varfuri
 	glGenBuffers(1, &VboId);
@@ -73,17 +72,17 @@ void CreateVBO(void)
 	glBindBuffer(GL_ARRAY_BUFFER, VboId);
 
 	// buffer-ul va contine atat coordonatele varfurilor, cat si datele de culoare
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vf_col) + sizeof(vf_pos), NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vf_pos), vf_pos);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(vf_pos), sizeof(vf_col), vf_col);
+	glBufferData(GL_ARRAY_BUFFER, (varfuri.size() + culori.size()) * sizeof(GLfloat), NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, varfuri.size() * sizeof(GLfloat), vf_pos);
+	glBufferSubData(GL_ARRAY_BUFFER, varfuri.size() * sizeof(GLfloat), culori.size() * sizeof(GLfloat), vf_col);
 
 	// buffer-ul pentru indici
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EboId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vf_ind), vf_ind, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indici.size() * sizeof(GLfloat), vf_ind, GL_STATIC_DRAW);
 
 	// se activeaza lucrul cu atribute; atributul 0 = pozitie, atributul 1 = culoare, acestea sunt indicate corect in VBO
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)sizeof(vf_pos));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(varfuri.size() * sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 
