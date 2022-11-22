@@ -31,7 +31,7 @@ codColLocation;
 int codCol;
 
 // elemente pentru matricea de vizualizare
-float Obsx = 0.0, Obsy = 0.0, Obsz = 300.f;
+float Obsx = 0.0, Obsy = 0.0, Obsz = 400.f;
 float Refx = 0.0f, Refy = 0.0f, Refz = -100.f;
 float Vx = 0.0;
 
@@ -58,10 +58,10 @@ void processNormalKeys(unsigned char key, int x, int y)
 		Vx -= 0.1;
 		break;
 	case '+':
-		Obsz += 10;
+		Obsz += 100;
 		break;
 	case '-':
-		Obsz -= 10;
+		Obsz -= 100;
 		break;
 	}
 	if (key == 27)
@@ -78,10 +78,10 @@ void processSpecialKeys(int key, int xx, int yy)
 		Obsx += 20;
 		break;
 	case GLUT_KEY_UP:
-		Obsy += 20;
+		Obsz += 20;
 		break;
 	case GLUT_KEY_DOWN:
-		Obsy -= 20;
+		Obsz -= 20;
 		break;
 	}
 }
@@ -90,35 +90,26 @@ void CreateVBO(void)
 	// varfurile 
 	GLfloat Vertices[] =
 	{
-		// varfurile (~verzi) din planul z=-50  
-		// coordonate                   // culori			
-		-50.0f,  -50.0f, -50.0f, 1.0f,  0.0f, 1.0f, 0.0f,
-		50.0f,  -50.0f,  -50.0f, 1.0f,   0.0f, 0.9f, 0.0f,
-		50.0f,  50.0f,  -50.0f, 1.0f,    0.0f, 0.6f, 0.0f,
-		-50.0f,  50.0f, -50.0f, 1.0f,   0.0f, 0.2f, 0.0f,
-		// varfurile (~rosii) din planul z=+50  
-		// coordonate                   // culori			
-		-50.0f,  -50.0f, 50.0f, 1.0f,  1.0f, 0.0f, 0.0f,
-		50.0f,  -50.0f,  50.0f, 1.0f,   0.7f, 0.0f, 0.0f,
-		50.0f,  50.0f,  50.0f, 1.0f,    0.5f, 0.0f, 0.0f,
-		-50.0f,  50.0f, 50.0f, 1.0f,   0.1f, 0.0f, 0.0f,
+		// coordonate                       // culori			
+		 0.0f,   0.0f,   50.0f,  1.0f,       1.0f, 0.0f, 0.0f, // 0 A
+		-50.0f,  0.0f,  -50.0f,  1.0f,       0.0f, 1.0f, 0.0f, // 1 B
+		 50.0f,  0.0f,  -50.0f,  1.0f,       0.0f, 1.0f, 0.0f, // 2 C
+		 0.0f,   50.0f,  0.0f,   1.0f,       0.0f, 1.0f, 0.0f, // 3 D
 	};
 
 	// indicii pentru varfuri
 	GLubyte Indices[] =
 	{
-		1, 0, 2,   2, 0, 3,  //  Fata "de jos"
-		2, 3, 6,   6, 3, 7,  // Lateral 
-		7, 3, 4,   4, 3, 0,  // Lateral 
-		4, 0, 5,   5, 0, 1,  // Lateral 
-		1, 2, 5,   5, 2, 6,  // Lateral 
-		5, 6, 4,   4, 6, 7, //  Fata "de sus"
-		0, 1, 2, 3,  // Contur fata de jos
-		4, 5, 6, 7,  // Contur fata de sus
-		0, 4, // Muchie laterala
-		1, 5, // Muchie laterala
-		2, 6, // Muchie laterala
-		3, 7 // Muchie laterala
+		0, 1, 2, // ABC
+		0, 1, 3, // ABD 
+		0, 3, 2, // ADC 
+		2, 1, 3, // CBD 
+		0, 1, // Contur AB
+		1, 3, // Contur BD
+		3, 0, // Contur DA
+		0, 2, // Contur AC
+		3, 2, // Contur DC
+		1, 2  // Contur BC
 	};
 
 	// generare VAO/buffere
@@ -195,15 +186,13 @@ void RenderFunction(void)
 	// Fetele
 	codCol = 0;
 	glUniform1i(codColLocation, codCol);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(0));
+	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, (void*)(0));
 
 	// Muchiile
 	codCol = 1;
 	glUniform1i(codColLocation, codCol);
-	glLineWidth(3.5);
-	glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, (void*)(36));
-	glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, (void*)(40));
-	glDrawElements(GL_LINES, 8, GL_UNSIGNED_BYTE, (void*)(44));
+	glLineWidth(2.0f);
+	glDrawElements(GL_LINES, 12, GL_UNSIGNED_BYTE, (void*)(12));
 
 	glutSwapBuffers();
 	glFlush();
