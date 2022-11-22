@@ -86,16 +86,11 @@ void CreateVBO(void)
 	// Varfurile 
 	GLfloat Vertices[] =
 	{
-		// punctele din planul z=-50   coordonate                   		
-		-50.0f,  -50.0f, -50.0f, 1.0f,
-		50.0f,  -50.0f,  -50.0f, 1.0f,
-		50.0f,  50.0f,  -50.0f, 1.0f,
-		-50.0f,  50.0f, -50.0f, 1.0f,
-		// punctele din planul z=+50  coordonate                   		
-		-50.0f,  -50.0f, 50.0f, 1.0f,
-		50.0f,  -50.0f,  50.0f, 1.0f,
-		50.0f,  50.0f,  50.0f, 1.0f,
-		-50.0f,  50.0f, 50.0f, 1.0f,
+		// coordonate                
+		 0.0f,   0.0f,   50.0f,  1.0f,  // 0 A
+		-50.0f,  0.0f,  -50.0f,  1.0f,  // 1 B
+		 50.0f,  0.0f,  -50.0f,  1.0f,  // 2 C
+		 0.0f,   100.0f,  0.0f,   1.0f, // 3 D
 	};
 
 	// Culorile instantelor
@@ -127,18 +122,16 @@ void CreateVBO(void)
 	// indicii pentru varfuri
 	GLubyte Indices[] =
 	{
-	  1, 2, 0,   0, 2, 3,  //  Fata "de jos"
-	  2, 3, 6,   6, 3, 7,
-	  7, 3, 4,   4, 3, 0,
-	  4, 0, 5,   5, 0, 1,
-	  1, 2, 5,   5, 2, 6,
-	  5, 6, 4,   4, 6, 7, //  Fata "de sus"
-	  0, 1, 2, 3,  // Contur fata de jos
-	  4, 5, 6, 7,  // Contur fata de sus
-	  0, 4,
-	  1, 5,
-	  2, 6,
-	  3, 7
+		0, 1, 2, // ABC
+		0, 1, 3, // ABD 
+		0, 3, 2, // ADC 
+		2, 1, 3, // CBD 
+		0, 1, // Contur AB
+		1, 3, // Contur BD
+		3, 0, // Contur DA
+		0, 2, // Contur AC
+		3, 2, // Contur DC
+		1, 2  // Contur BC
 	};
 
 	// generare buffere
@@ -239,14 +232,12 @@ void RenderFunction(void)
 	// Fetele
 	codCol = 0;
 	glUniform1i(codColLocation, codCol);
-	glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, 0, INSTANCE_COUNT);
+	glDrawElementsInstanced(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, (void*)(0), INSTANCE_COUNT);
 	// Muchiile
 	codCol = 1;
 	glUniform1i(codColLocation, codCol);
 	glLineWidth(2.5);
-	glDrawElementsInstanced(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, (void*)(36), INSTANCE_COUNT);
-	glDrawElementsInstanced(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, (void*)(40), INSTANCE_COUNT);
-	glDrawElementsInstanced(GL_LINES, 8, GL_UNSIGNED_BYTE, (void*)(44), INSTANCE_COUNT);
+	glDrawElementsInstanced(GL_LINES, 12, GL_UNSIGNED_BYTE, (void*)(12), INSTANCE_COUNT);
 
 	glutSwapBuffers();
 	glFlush();
