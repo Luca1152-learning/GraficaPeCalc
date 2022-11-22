@@ -33,8 +33,7 @@ codCol;
 
 // variabile pentru matricea de vizualizare
 float Obsx = 0.0, Obsy = 0.0, Obsz = -800.f;
-float Refx = 0.0f, Refy = 0.0f;
-float Vx = 0.0;
+float Refx = 0.0f, Refy = 0.0f, Refz = 0.0f;
 
 // variabile pentru matricea de proiectie
 float width = 800, height = 600, znear = 1, fovdeg = 90;
@@ -45,20 +44,20 @@ glm::vec3 Obs, PctRef, Vert;
 // matrice utilizate
 glm::mat4 view, projection;
 
+// Survolare
+float Vx = 0.0f, Vy = 0.0f, Vz = 1.0f;
+float alpha = 0.0f, beta = 0.0f, dist = 200.0f;
+float incr_alpha1 = 0.01, incr_alpha2 = 0.01;
+float fov = 90.f * PI / 180;
+
 void processNormalKeys(unsigned char key, int x, int y)
 {
 	switch (key) {
-	case 'l':
-		Vx += 0.1;
-		break;
-	case 'r':
-		Vx -= 0.1;
+	case '-':
+		dist -= 5.0;
 		break;
 	case '+':
-		Obsz += 10;
-		break;
-	case '-':
-		Obsz -= 10;
+		dist += 5.0;
 		break;
 	}
 	if (key == 27)
@@ -68,16 +67,32 @@ void processSpecialKeys(int key, int xx, int yy) {
 	switch (key)
 	{
 	case GLUT_KEY_LEFT:
-		Obsx -= 20;
+		beta -= 0.01;
 		break;
 	case GLUT_KEY_RIGHT:
-		Obsx += 20;
+		beta += 0.01;
 		break;
 	case GLUT_KEY_UP:
-		Obsy += 20;
+		alpha += incr_alpha1;
+		if (abs(alpha - PI / 2) < 0.05)
+		{
+			incr_alpha1 = 0.f;
+		}
+		else
+		{
+			incr_alpha1 = 0.01f;
+		}
 		break;
 	case GLUT_KEY_DOWN:
-		Obsy -= 20;
+		alpha -= incr_alpha2;
+		if (abs(alpha + PI / 2) < 0.05)
+		{
+			incr_alpha2 = 0.f;
+		}
+		else
+		{
+			incr_alpha2 = 0.01f;
+		}
 		break;
 	}
 }
@@ -217,16 +232,20 @@ void RenderFunction(void)
 	glBindBuffer(GL_ARRAY_BUFFER, VBModelMat);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EboId);
 
-	// matricea de vizualizare
-	Obs = glm::vec3(Obsx, Obsy, Obsz);
-	Refx = Obsx; Refy = Obsy;
-	PctRef = glm::vec3(Refx, Refy, 800.0f);
-	Vert = glm::vec3(Vx, 1.0f, 0.0f);
+	//pozitia observatorului - se deplaseaza pe sfera
+	Obsx = Refx + dist * cos(alpha) * cos(beta);
+	Obsy = Refy + dist * cos(alpha) * sin(beta);
+	Obsz = Refz + dist * sin(alpha);
+
+	// reperul de vizualizare
+	glm::vec3 Obs = glm::vec3(Obsx, Obsy, Obsz);   // se schimba pozitia observatorului	
+	glm::vec3 PctRef = glm::vec3(Refx, Refy, Refz); // pozitia punctului de referinta
+	glm::vec3 Vert = glm::vec3(Vx, Vy, Vz); // verticala din planul de vizualizare 
 	view = glm::lookAt(Obs, PctRef, Vert);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
-	// matricea de proiectie
-	projection = glm::infinitePerspective(fovdeg * PI / 180, GLfloat(width) / GLfloat(height), znear);
+	// matricea de proiectie, pot fi testate si alte variante
+	projection = glm::infinitePerspective(GLfloat(fov), GLfloat(width) / GLfloat(height), znear);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, &projection[0][0]);
 
 	// Fetele
