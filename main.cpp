@@ -13,7 +13,7 @@
 #include "glm/gtc/type_ptr.hpp"
 using namespace std;
 
-const int NR_POINTS = 20;
+const int NR_POINTS = 50;
 float PI = 3.141592f;
 
 GLuint
@@ -28,7 +28,7 @@ codColLocation;
 int codCol;
 GLint winWidth = 1000, winHeight = 600;
 float width = winWidth / 10, height = winHeight / 10;
-float cx = 10.f, cy = 5.f, radius = 20.0;
+float cx = 10.f, cy = 5.f, radius = 2.5;
 
 glm::mat4 myMatrix;
 
@@ -38,10 +38,15 @@ void CreateVBO(void)
 	for (int i = 0; i < NR_POINTS; i++)
 	{
 		// se foloseste reprezentarea parametrica pentru a genera varfurile (puncte situate pe cerc)
+		float radians = 6 * PI * i / NR_POINTS;
+
 		vf_coord[i] =
-			glm::vec4(cx + radius * cos(2 * PI * i / NR_POINTS),
-				cy + radius * sin(2 * PI * i / NR_POINTS),
-				0.0f, 1.0f);
+			glm::vec4(
+				radius * (cos(radians) + radians * sin(radians)),
+				radius * (sin(radians) - radians * cos(radians)),
+				0.0f, 
+				1.0f
+			);
 	};
 	// culorile varfurilor
 	glm::vec4 vf_col[NR_POINTS];
@@ -50,9 +55,9 @@ void CreateVBO(void)
 		vf_col[i] = glm::vec4(abs(0.3 * i / NR_POINTS + cos(0.1 * i)), abs(0.4 * i / NR_POINTS + sin(0.01 * i)), abs(0.5 * i / NR_POINTS - sin(0.1 * i)), 1.0f);
 	};
 	// indicii
-	GLuint vf_ind[NR_POINTS + 1];
-	for (int i = 0; i <= NR_POINTS; i++)
-		vf_ind[i] = i % NR_POINTS;
+	GLuint vf_ind[NR_POINTS];
+	for (int i = 0; i < NR_POINTS - 1; i++)
+		vf_ind[i] = i;
 	// se creeaza un buffer nou pentru varfuri
 	glGenBuffers(1, &VboId);
 	// buffer pentru indici
