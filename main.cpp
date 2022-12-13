@@ -26,7 +26,7 @@ GLuint
 float const PI = 3.141592f;
 // Elemente pentru reprezentarea suprafetei
 // (1) intervalele pentru parametrii considerati (u si v)
-float const U_MIN = -PI / 2, U_MAX = PI / 2, V_MIN = 0, V_MAX = 2 * PI;
+float const U_MIN = -PI / 2, U_MAX = PI / 2, V_MIN = 0, V_MAX = 2 * PI ;
 // (2) numarul de paralele/meridiane, de fapt numarul de valori ptr parametri
 int const NR_PARR = 7, NR_MERID = 25;
 // (3) pasul cu care vom incrementa u, respectiv v
@@ -107,9 +107,9 @@ void CreateVBO(void)
 {
 	// varfurile 
 	// (4) Matricele pentru varfuri, culori, indici
-	glm::vec4 Vertices[(NR_PARR + 1) * NR_MERID];
+	glm::vec4 Vertices[(NR_PARR + 1) * NR_MERID + 2];
 	glm::vec3 Colors[(NR_PARR + 1) * NR_MERID];
-	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID];
+	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 3 * NR_MERID];
 	for (int merid = 0; merid < NR_MERID; merid++)
 	{
 		for (int parr = 0; parr < NR_PARR + 1; parr++)
@@ -150,6 +150,29 @@ void CreateVBO(void)
 				Indices[AUX + 4 * index + 3] = index4;
 			}
 		}
+	};
+	
+	// Center top
+	int centerTopIndex = (NR_PARR + 1) * NR_MERID;
+	float usedMaxU = U_MIN + NR_PARR * step_u;
+	Vertices[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40, 1.0);
+
+	// Center bottom
+	int centerBottomIndex = centerTopIndex + 1;
+	Vertices[centerBottomIndex] = glm::vec4(0.0f, 0.0f, 0 * 40, 1.0);
+
+	// Indices top
+	for (int i = 0; i < NR_MERID; i++)
+	{
+		int startIndicesTop = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID;
+
+		Indices[startIndicesTop + 3 * i] = centerTopIndex;
+
+		int currentMeridianIndex = i * (NR_PARR + 1) + NR_PARR;
+		Indices[startIndicesTop + 3 * i + 1] = currentMeridianIndex;
+
+		int nextMeridianIndex = (i + 1) % NR_MERID * (NR_PARR + 1) + NR_PARR;
+		Indices[startIndicesTop + 3 * i + 2] = nextMeridianIndex;
 	};
 
 	// generare VAO/buffere
@@ -279,6 +302,13 @@ void RenderFunction(void)
 			GL_UNSIGNED_SHORT,
 			(GLvoid*)(((NR_PARR + 1) * (NR_MERID)+parr * NR_MERID) * sizeof(GLushort)));
 	}
+
+	glDrawElements(
+		GL_TRIANGLES,
+		3 * NR_MERID,
+		GL_UNSIGNED_SHORT,
+		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
+	);
 
 	glutSwapBuffers();
 	glFlush();
