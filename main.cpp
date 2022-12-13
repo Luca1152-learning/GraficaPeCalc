@@ -108,8 +108,8 @@ void CreateVBO(void)
 	// varfurile 
 	// (4) Matricele pentru varfuri, culori, indici
 	glm::vec4 Vertices[(NR_PARR + 1) * NR_MERID + 2];
-	glm::vec3 Colors[(NR_PARR + 1) * NR_MERID];
-	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 3 * NR_MERID];
+	glm::vec3 Colors[(NR_PARR + 1) * NR_MERID + 2];
+	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * NR_MERID + 2 * 3 * NR_MERID];
 	for (int merid = 0; merid < NR_MERID; merid++)
 	{
 		for (int parr = 0; parr < NR_PARR + 1; parr++)
@@ -152,19 +152,31 @@ void CreateVBO(void)
 		}
 	};
 	
-	// Center top
+	// Center - top
 	int centerTopIndex = (NR_PARR + 1) * NR_MERID;
 	float usedMaxU = U_MIN + NR_PARR * step_u;
 	Vertices[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40, 1.0);
+	Colors[centerTopIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	// Center bottom
+	// Center - bottom
 	int centerBottomIndex = centerTopIndex + 1;
 	Vertices[centerBottomIndex] = glm::vec4(0.0f, 0.0f, 0 * 40, 1.0);
+	Colors[centerBottomIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	// Indices top
+	// Lines - Indices top
 	for (int i = 0; i < NR_MERID; i++)
 	{
 		int startIndicesTop = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID;
+
+		Indices[startIndicesTop + 2 * i] = centerTopIndex;
+
+		int currentMeridianIndex = i * (NR_PARR + 1) + NR_PARR;
+		Indices[startIndicesTop + 2 * i + 1] = currentMeridianIndex;
+	};
+	// Triangles - Indices top
+	for (int i = 0; i < NR_MERID; i++)
+	{
+		int startIndicesTop = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * NR_MERID;
 
 		Indices[startIndicesTop + 3 * i] = centerTopIndex;
 
@@ -303,11 +315,27 @@ void RenderFunction(void)
 			(GLvoid*)(((NR_PARR + 1) * (NR_MERID)+parr * NR_MERID) * sizeof(GLushort)));
 	}
 
+	// Lines - top & bottom
+	codCol = 1;
+	glUniform1i(codColLocation, codCol);
+	for (int merid = 0; merid < NR_MERID; merid++)
+	{
+		glDrawElements(
+			GL_LINES,
+			2 * NR_MERID,
+			GL_UNSIGNED_SHORT,
+			(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
+		);
+	}
+
+	// Triangles - top & bottom
+	codCol = 0;
+	glUniform1i(codColLocation, codCol);
 	glDrawElements(
 		GL_TRIANGLES,
 		3 * NR_MERID,
 		GL_UNSIGNED_SHORT,
-		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
+		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * NR_MERID) * sizeof(GLushort))
 	);
 
 	glutSwapBuffers();
