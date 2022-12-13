@@ -109,7 +109,7 @@ void CreateVBO(void)
 	// (4) Matricele pentru varfuri, culori, indici
 	glm::vec4 Vertices[(NR_PARR + 1) * NR_MERID + 2];
 	glm::vec3 Colors[(NR_PARR + 1) * NR_MERID + 2];
-	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * NR_MERID + 2 * 3 * NR_MERID];
+	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID];
 	for (int merid = 0; merid < NR_MERID; merid++)
 	{
 		for (int parr = 0; parr < NR_PARR + 1; parr++)
@@ -157,12 +157,6 @@ void CreateVBO(void)
 	float usedMaxU = U_MIN + NR_PARR * step_u;
 	Vertices[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40, 1.0);
 	Colors[centerTopIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	// Center - bottom
-	int centerBottomIndex = centerTopIndex + 1;
-	Vertices[centerBottomIndex] = glm::vec4(0.0f, 0.0f, 0 * 40, 1.0);
-	Colors[centerBottomIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-
 	// Lines - Indices top
 	for (int i = 0; i < NR_MERID; i++)
 	{
@@ -176,7 +170,7 @@ void CreateVBO(void)
 	// Triangles - Indices top
 	for (int i = 0; i < NR_MERID; i++)
 	{
-		int startIndicesTop = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * NR_MERID;
+		int startIndicesTop = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID;
 
 		Indices[startIndicesTop + 3 * i] = centerTopIndex;
 
@@ -185,6 +179,35 @@ void CreateVBO(void)
 
 		int nextMeridianIndex = (i + 1) % NR_MERID * (NR_PARR + 1) + NR_PARR;
 		Indices[startIndicesTop + 3 * i + 2] = nextMeridianIndex;
+	};
+
+	// Center - bottom
+	int centerBottomIndex = centerTopIndex + 1;
+	float usedMinU = U_MIN + 0 * step_u;
+	Vertices[centerBottomIndex] = glm::vec4(0.0f, 0.0f, usedMinU * 40, 1.0);
+	Colors[centerBottomIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	// Lines - Indices bottom
+	for (int i = 0; i < NR_MERID; i++)
+	{
+		int startIndicesBottom = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * NR_MERID;
+
+		Indices[startIndicesBottom + 2 * i] = centerBottomIndex;
+
+		int currentMeridianIndex = i * (NR_PARR + 1) + 0;
+		Indices[startIndicesBottom + 2 * i + 1] = currentMeridianIndex;
+	};
+	// Triangles - Indices bottom
+	for (int i = 0; i < NR_MERID; i++)
+	{
+		int startIndicesBottom = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 3 * NR_MERID;
+
+		Indices[startIndicesBottom + 3 * i] = centerBottomIndex;
+
+		int currentMeridianIndex = i * (NR_PARR + 1) + 0;
+		Indices[startIndicesBottom + 3 * i + 1] = currentMeridianIndex;
+
+		int nextMeridianIndex = (i + 1) % NR_MERID * (NR_PARR + 1) + 0;
+		Indices[startIndicesBottom + 3 * i + 2] = nextMeridianIndex;
 	};
 
 	// generare VAO/buffere
@@ -322,7 +345,7 @@ void RenderFunction(void)
 	{
 		glDrawElements(
 			GL_LINES,
-			2 * NR_MERID,
+			2 * 2 * NR_MERID,
 			GL_UNSIGNED_SHORT,
 			(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
 		);
@@ -333,9 +356,9 @@ void RenderFunction(void)
 	glUniform1i(codColLocation, codCol);
 	glDrawElements(
 		GL_TRIANGLES,
-		3 * NR_MERID,
+		2 * 3 * NR_MERID,
 		GL_UNSIGNED_SHORT,
-		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * NR_MERID) * sizeof(GLushort))
+		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID) * sizeof(GLushort))
 	);
 
 	glutSwapBuffers();
