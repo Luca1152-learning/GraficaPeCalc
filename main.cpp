@@ -174,40 +174,89 @@ void CreateVAO1(void)
 
 void CreateVAO2(void)
 {
-	// CUBUL 
-	// 
-	GLfloat Vertices2[] =
+	// varfurile 
+	// (4) Matricele pentru varfuri, culori, indici
+	glm::vec4 Vertices2[(NR_PARR + 1) * NR_MERID + 2];
+	glm::vec3 Colors2[(NR_PARR + 1) * NR_MERID + 2];
+	GLushort Indices2[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID];
+	for (int merid = 0; merid < NR_MERID; merid++)
 	{
-		-20.0f, -20.0f, 50.0f, 1.0f,
-		 20.0f, -20.0f, 50.0f, 1.0f,
-		 20.0f,  20.0f, 50.0f, 1.0f,
-		-20.0f,  20.0f, 50.0f, 1.0f,
-		-20.0f, -20.0f, 90.0f, 1.0f,
-		 20.0f, -20.0f, 90.0f, 1.0f,
-		 20.0f,  20.0f, 90.0f, 1.0f,
-		-20.0f,  20.0f, 90.0f, 1.0f
+		for (int parr = 0; parr < NR_PARR + 1; parr++)
+		{
+			// implementarea reprezentarii parametrice 
+			float u = U_MIN + parr * step_u; // valori pentru u si v
+			float v = V_MIN + merid * step_v;
+			float x_vf = radius * cosf(v);
+			float y_vf = radius * sinf(v);
+			float z_vf = u * 40;
+
+			// identificator ptr varf; coordonate + culoare + indice la parcurgerea meridianelor
+			index = merid * (NR_PARR + 1) + parr;
+			Vertices2[index] = glm::vec4(x_vf, y_vf, z_vf, 1.0);
+			Colors2[index] = glm::vec3(0.1f + sinf(u), 0.1f + cosf(v), 0.1f + -1.5 * sinf(u));
+			Indices2[index] = index;
+
+			// indice ptr acelasi varf la parcurgerea paralelelor
+			index_aux = parr * (NR_MERID)+merid;
+			Indices2[(NR_PARR + 1) * NR_MERID + index_aux] = index;
+
+			// indicii pentru desenarea fetelor, pentru varful curent sunt definite 4 varfuri
+			if ((parr + 1) % (NR_PARR + 1) != 0) // varful considerat sa nu fie Polul Nord
+			{
+				int AUX = 2 * (NR_PARR + 1) * NR_MERID;
+				int index1 = index; // varful v considerat
+				int index2 = index + (NR_PARR + 1); // dreapta lui v, pe meridianul urmator
+				int index3 = index2 + 1;  // dreapta sus fata de v
+				int index4 = index + 1;  // deasupra lui v, pe acelasi meridian
+				if (merid == NR_MERID - 1)  // la ultimul meridian, trebuie revenit la meridianul initial
+				{
+					index2 = index2 % (NR_PARR + 1);
+					index3 = index3 % (NR_PARR + 1);
+				}
+				Indices2[AUX + 4 * index] = index1;  // unele valori ale lui Indices, corespunzatoare Polului Nord, au valori neadecvate
+				Indices2[AUX + 4 * index + 1] = index2;
+				Indices2[AUX + 4 * index + 2] = index3;
+				Indices2[AUX + 4 * index + 3] = index4;
+			}
+		}
 	};
 
-	GLfloat Colors2[] =
+	// Center - top
+	int centerTopIndex = (NR_PARR + 1) * NR_MERID;
+	float usedMaxU = U_MIN + NR_PARR * step_u;
+	Vertices2[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40, 1.0);
+	Colors2[centerTopIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	// Triangles - Indices top
+	for (int i = 0; i < NR_MERID; i++)
 	{
-		0.8f, 0.8f, 0.8f,
-		0.7f, 0.7f, 0.7f,
-		0.6f, 0.6f, 0.6f,
-		0.5f, 0.5f, 0.5f,
-		0.4f, 0.4f, 0.4f,
-		0.3f, 0.3f, 0.3f,
-		0.2f, 0.2f, 0.2f,
-		0.1f, 0.1f, 0.1f
+		int startIndicesTop = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID;
+
+		Indices2[startIndicesTop + 3 * i] = centerTopIndex;
+
+		int currentMeridianIndex = i * (NR_PARR + 1) + NR_PARR;
+		Indices2[startIndicesTop + 3 * i + 1] = currentMeridianIndex;
+
+		int nextMeridianIndex = (i + 1) % NR_MERID * (NR_PARR + 1) + NR_PARR;
+		Indices2[startIndicesTop + 3 * i + 2] = nextMeridianIndex;
 	};
 
-	GLushort Indices2[] =
+	// Center - bottom
+	int centerBottomIndex = centerTopIndex + 1;
+	float usedMinU = U_MIN + 0 * step_u;
+	Vertices2[centerBottomIndex] = glm::vec4(0.0f, 0.0f, usedMinU * 40, 1.0);
+	Colors2[centerBottomIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	// Triangles - Indices bottom
+	for (int i = 0; i < NR_MERID; i++)
 	{
-	  1, 2, 0,   2, 0, 3,
-	  2, 3, 6,   6, 3, 7,
-	  7, 3, 4,   4, 3, 0,
-	  4, 0, 5,   5, 0, 1,
-	  1, 2, 5,   5, 2, 6,
-	  5, 6, 4,   4, 6, 7,
+		int startIndicesBottom = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 3 * NR_MERID;
+
+		Indices2[startIndicesBottom + 3 * i] = centerBottomIndex;
+
+		int currentMeridianIndex = i * (NR_PARR + 1) + 0;
+		Indices2[startIndicesBottom + 3 * i + 1] = currentMeridianIndex;
+
+		int nextMeridianIndex = (i + 1) % NR_MERID * (NR_PARR + 1) + 0;
+		Indices2[startIndicesBottom + 3 * i + 2] = nextMeridianIndex;
 	};
 
 	// generare VAO/buffere
@@ -293,7 +342,7 @@ void RenderFunction(void)
 	glEnable(GL_DEPTH_TEST);
 	setMVP();
 
-	// SFERA
+	// Sfera
 	glBindVertexArray(VaoId1);
 	codCol = 0;
 	glUniform1i(codColLocation, codCol);
@@ -307,11 +356,25 @@ void RenderFunction(void)
 				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+4 * patr) * sizeof(GLushort)));
 	}
 	
-	// CUBUL
+	// Cilindru
 	glBindVertexArray(VaoId2);
 	codCol = 0;
 	glUniform1i(codColLocation, codCol);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, (GLvoid*)(0));
+	for (int patr = 0; patr < (NR_PARR + 1) * NR_MERID; patr++)
+	{
+		if ((patr + 1) % (NR_PARR + 1) != 0) // nu sunt considerate fetele in care in stanga jos este Polul Nord
+			glDrawElements(
+				GL_QUADS,
+				4,
+				GL_UNSIGNED_SHORT,
+				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+ 4 * patr) * sizeof(GLushort)));
+	}
+	glDrawElements(
+		GL_TRIANGLES,
+		2 * 3 * NR_MERID,
+		GL_UNSIGNED_SHORT,
+		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
+	);
 
 	glutSwapBuffers();
 	glFlush();
