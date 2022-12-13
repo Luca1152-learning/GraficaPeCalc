@@ -33,7 +33,7 @@ float step_u = (U_MAX - U_MIN) / NR_PARR, step_v = (V_MAX - V_MIN) / NR_MERID;
 
 // alte variabile
 int codCol;
-float sphereRadius = 60, cylinderRadius = 7;
+float sphereRadius = 60, cylinderRadius = 7, cylinderHeight = 80;
 int index, index_aux;
 
 // variabile pentru matricea de vizualizare
@@ -118,7 +118,7 @@ void CreateVAO1(void)
 			float v = V_MIN + merid * step_v;
 			float x_vf = sphereRadius * cosf(u) * cosf(v); // coordonatele varfului corespunzator lui (u,v)
 			float y_vf = sphereRadius * cosf(u) * sinf(v);
-			float z_vf = sphereRadius * sinf(u) + 40 + sphereRadius / 2;
+			float z_vf = sphereRadius * sinf(u) + cylinderHeight + sphereRadius / 2;
 
 			// identificator ptr varf; coordonate + culoare + indice la parcurgerea meridianelor
 			index = merid * (NR_PARR + 1) + parr;
@@ -188,12 +188,12 @@ void CreateVAO2(void)
 			float v = V_MIN + merid * step_v;
 			float x_vf = cylinderRadius * cosf(v);
 			float y_vf = cylinderRadius * sinf(v);
-			float z_vf = u * 40;
+			float z_vf = u * cylinderHeight;
 
 			// identificator ptr varf; coordonate + culoare + indice la parcurgerea meridianelor
 			index = merid * (NR_PARR + 1) + parr;
 			Vertices2[index] = glm::vec4(x_vf, y_vf, z_vf, 1.0);
-			Colors2[index] = glm::vec3(0.1f + sinf(u), 0.1f + cosf(v), 0.1f + -1.5 * sinf(u));
+			Colors2[index] = glm::vec3(0.7f + 0.3f * sinf(u), 0.7f + 0.3f * sinf(u), 0.7f + 0.3f * sinf(u));
 			Indices2[index] = index;
 
 			// indice ptr acelasi varf la parcurgerea paralelelor
@@ -224,7 +224,7 @@ void CreateVAO2(void)
 	// Center - top
 	int centerTopIndex = (NR_PARR + 1) * NR_MERID;
 	float usedMaxU = U_MIN + NR_PARR * step_u;
-	Vertices2[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40, 1.0);
+	Vertices2[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * cylinderHeight, 1.0);
 	Colors2[centerTopIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	// Triangles - Indices top
 	for (int i = 0; i < NR_MERID; i++)
@@ -243,7 +243,7 @@ void CreateVAO2(void)
 	// Center - bottom
 	int centerBottomIndex = centerTopIndex + 1;
 	float usedMinU = U_MIN + 0 * step_u;
-	Vertices2[centerBottomIndex] = glm::vec4(0.0f, 0.0f, usedMinU * 40, 1.0);
+	Vertices2[centerBottomIndex] = glm::vec4(0.0f, 0.0f, usedMinU * cylinderHeight, 1.0);
 	Colors2[centerBottomIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	// Triangles - Indices bottom
 	for (int i = 0; i < NR_MERID; i++)
@@ -341,25 +341,12 @@ void RenderFunction(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	setMVP();
-
-	// Sfera
-	glBindVertexArray(VaoId1);
+	
 	codCol = 0;
 	glUniform1i(codColLocation, codCol);
-	for (int patr = 0; patr < (NR_PARR + 1) * NR_MERID; patr++)
-	{
-		if ((patr + 1) % (NR_PARR + 1) != 0) // nu sunt considerate fetele in care in stanga jos este Polul Nord
-			glDrawElements(
-				GL_QUADS,
-				4,
-				GL_UNSIGNED_SHORT,
-				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+4 * patr) * sizeof(GLushort)));
-	}
-	
+
 	// Cilindru
 	glBindVertexArray(VaoId2);
-	codCol = 0;
-	glUniform1i(codColLocation, codCol);
 	for (int patr = 0; patr < (NR_PARR + 1) * NR_MERID; patr++)
 	{
 		if ((patr + 1) % (NR_PARR + 1) != 0) // nu sunt considerate fetele in care in stanga jos este Polul Nord
@@ -375,6 +362,18 @@ void RenderFunction(void)
 		GL_UNSIGNED_SHORT,
 		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
 	);
+
+	// Sfera
+	glBindVertexArray(VaoId1);
+	for (int patr = 0; patr < (NR_PARR + 1) * NR_MERID; patr++)
+	{
+		if ((patr + 1) % (NR_PARR + 1) != 0) // nu sunt considerate fetele in care in stanga jos este Polul Nord
+			glDrawElements(
+				GL_QUADS,
+				4,
+				GL_UNSIGNED_SHORT,
+				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+4 * patr) * sizeof(GLushort)));
+	}
 
 	glutSwapBuffers();
 	glFlush();
