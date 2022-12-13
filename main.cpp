@@ -28,7 +28,7 @@ float const PI = 3.141592f;
 // (1) intervalele pentru parametrii considerati (u si v)
 float const U_MIN = -PI / 2, U_MAX = PI / 2, V_MIN = 0, V_MAX = 2 * PI;
 // (2) numarul de paralele/meridiane, de fapt numarul de valori ptr parametri
-int const NR_PARR = 10, NR_MERID = 20;
+int const NR_PARR = 7, NR_MERID = 25;
 // (3) pasul cu care vom incrementa u, respectiv v
 float step_u = (U_MAX - U_MIN) / NR_PARR, step_v = (V_MAX - V_MIN) / NR_MERID;
 
@@ -117,9 +117,9 @@ void CreateVBO(void)
 			// implementarea reprezentarii parametrice 
 			float u = U_MIN + parr * step_u; // valori pentru u si v
 			float v = V_MIN + merid * step_v;
-			float x_vf = radius * cosf(u) * cosf(v); // coordonatele varfului corespunzator lui (u,v)
-			float y_vf = radius * cosf(u) * sinf(v);
-			float z_vf = radius * sinf(u);
+			float x_vf = radius * cosf(v);
+			float y_vf = radius * sinf(v);
+			float z_vf = u * 40;
 
 			// identificator ptr varf; coordonate + culoare + indice la parcurgerea meridianelor
 			index = merid * (NR_PARR + 1) + parr;
