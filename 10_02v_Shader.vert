@@ -13,6 +13,7 @@ uniform vec3 lightPos;
 uniform vec3 viewPos;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
+uniform vec3 ambientColor;
 
 void main(void)
   {
@@ -25,7 +26,7 @@ void main(void)
 
     // Ambient
     float ambientStrength = 0.2f;
-    vec3 ambient_light = ambientStrength * lightColor;  // ambient_light=ambientStrength*lightColor 
+    vec3 ambient_light = ambientStrength * ambientColor;  // ambient_light=ambientStrength*lightColor 
     vec3 ambient_term= ambient_light * objectColor; // ambient_material=objectColor
   	
     // Diffuse 

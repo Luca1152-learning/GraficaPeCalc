@@ -48,7 +48,7 @@ GLuint
 	rendermode,
 	l1, l2,
 	codCol;
-GLint objectColorLoc, lightColorLoc, lightPosLoc, viewPosLoc;
+GLint objectColorLoc, lightColorLoc, ambientColorLoc, lightPosLoc, viewPosLoc;
 
 // variabile pentru matricea de vizualizare
 float Obsx = 0.0, Obsy = -600.0, Obsz = 0.f;
@@ -249,6 +249,7 @@ void Initialize(void)
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); // culoarea de fond a ecranului
 	CreateVBO();
 	CreateShadersFragment();
+	ambientColorLoc = glGetUniformLocation(ProgramIdf, "ambientColor");
 	objectColorLoc = glGetUniformLocation(ProgramIdf, "objectColor");
 	lightColorLoc = glGetUniformLocation(ProgramIdf, "lightColor");
 	lightPosLoc = glGetUniformLocation(ProgramIdf, "lightPos");
@@ -256,6 +257,7 @@ void Initialize(void)
 	viewLocation = glGetUniformLocation(ProgramIdf, "view");
 	projLocation = glGetUniformLocation(ProgramIdf, "projection");
 	CreateShadersVertex();
+	ambientColorLoc = glGetUniformLocation(ProgramIdv, "ambientColor");
 	objectColorLoc = glGetUniformLocation(ProgramIdv, "objectColor");
 	lightColorLoc = glGetUniformLocation(ProgramIdv, "lightColor");
 	lightPosLoc = glGetUniformLocation(ProgramIdv, "lightPos");
@@ -278,9 +280,11 @@ void RenderFunction(void)
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, &projection[0][0]);
 
 	// variabile uniforme pentru iluminare
-	glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.4f);
-	glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
-	glUniform3f(lightPosLoc, 400.f, -400.f, 400.f);
+	glUniform3f(objectColorLoc, 0.5f, 0.5f, 0.5f);
+	glUniform3f(lightColorLoc, 1.0f, 0.98f, 0.61f);
+	glUniform3f(ambientColorLoc, 0.74f, 0.57f, 0.09f);
+	// ^ Schimbat culoarea luminiii
+	glUniform3f(lightPosLoc, 200.f, -200.f, 200.f);
 	glUniform3f(viewPosLoc, Obsx, Obsy, Obsz);
 	switch (rendermode)
 	{

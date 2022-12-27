@@ -8,14 +8,15 @@ in vec3 inViewPos;
 
 out vec4 out_Color;
 
+uniform vec3 ambientColor;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 
 void main(void)
   {
     // Ambient
-    float ambientStrength = 0.2f;
-    vec3 ambient_light = ambientStrength * lightColor;  // ambient_light=ambientStrength*lightColor 
+    float ambientStrength = 0.4f;
+    vec3 ambient_light = ambientStrength * ambientColor;
     vec3 ambient_term= ambient_light * objectColor; // ambient_material=objectColor
   	
     // Diffuse 
@@ -27,7 +28,7 @@ void main(void)
     
     // Specular
     float specularStrength = 0.5f;
-    float shininess = 100.0f;
+    float shininess = 256.0f;
     vec3 viewDir = normalize(inViewPos - FragPos); // versorul catre observator
     vec3 reflectDir = normalize(reflect(-lightDir, norm));  // versorul vectorului R 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess); 
