@@ -20,8 +20,7 @@ GLuint
 	EboId,
 	ProgramId,
 	viewLocation,
-	projLocation,
-	codColLocation;
+	projLocation;
 
 float const PI = 3.141592f;
 // Elemente pentru reprezentarea suprafetei
@@ -33,7 +32,6 @@ int const NR_PARR = 7, NR_MERID = 25;
 float step_u = (U_MAX - U_MIN) / NR_PARR, step_v = (V_MAX - V_MIN) / NR_MERID;
 
 // alte variabile
-int codCol;
 float radius = 50;
 int index, index_aux;
 
@@ -269,7 +267,6 @@ void Initialize(void)
 	viewPosLoc = glGetUniformLocation(ProgramId, "viewPos");
 	viewLocation = glGetUniformLocation(ProgramId, "view");
 	projLocation = glGetUniformLocation(ProgramId, "projection");
-	codColLocation = glGetUniformLocation(ProgramId, "codCol");
 }
 void reshapeFcn(GLint newWidth, GLint newHeight)
 {
@@ -307,17 +304,7 @@ void RenderFunction(void)
 	glUniform3f(lightPosLoc, 0.f, 100.f, 100.f);
 	glUniform3f(viewPosLoc, Obsx, Obsy, Obsz);
 
-	// (5) desenarea punctelor/muchiilor/fetelor
-
-	// desenarea punctelor
-	//glPointSize(3.0);
-	//glDrawArrays(GL_POINTS, 0, (NR_PARR + 1) * NR_MERID);
-
-	glUseProgram(ProgramId);
-
 	// desenarea fetelor
-	codCol = 0;
-	glUniform1i(codColLocation, codCol);
 	for (int patr = 0; patr < (NR_PARR + 1) * NR_MERID; patr++)
 	{
 		if ((patr + 1) % (NR_PARR + 1) != 0) // nu sunt considerate fetele in care in stanga jos este Polul Nord
@@ -327,11 +314,6 @@ void RenderFunction(void)
 				GL_UNSIGNED_SHORT,
 				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+4 * patr) * sizeof(GLushort)));
 	}
-
-	//// desenarea muchiilor - meridiane/paralele
-	//codCol = 1;
-	//glUniform1i(codColLocation, codCol);
-	//glLineWidth(2.0);
 
 	// fiecare meridian separat
 	for (int merid = 0; merid < NR_MERID; merid++)
@@ -343,9 +325,6 @@ void RenderFunction(void)
 			(GLvoid*)((merid * NR_PARR + merid) * sizeof(GLushort)));
 	}
 
-	// o varianta mai simplista pt meridiane, in care apare si un segment Nord-Sud
-	// glDrawElements(GL_LINE_STRIP, (NR_PARR + 1) * (NR_MERID), GL_UNSIGNED_SHORT, 0);
-
 	// fiecare cerc paralel separat
 	for (int parr = 1; parr < NR_PARR; parr++)
 	{
@@ -356,22 +335,7 @@ void RenderFunction(void)
 			(GLvoid*)(((NR_PARR + 1) * (NR_MERID)+parr * NR_MERID) * sizeof(GLushort)));
 	}
 
-	//// Lines - top & bottom
-	//codCol = 1;
-	//glUniform1i(codColLocation, codCol);
-	//for (int merid = 0; merid < NR_MERID; merid++)
-	//{
-	//	glDrawElements(
-	//		GL_LINES,
-	//		2 * 2 * NR_MERID,
-	//		GL_UNSIGNED_SHORT,
-	//		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
-	//	);
-	//}
-
 	// Triangles - top & bottom
-	codCol = 0;
-	glUniform1i(codColLocation, codCol);
 	glDrawElements(
 		GL_TRIANGLES,
 		2 * 3 * NR_MERID,
