@@ -9,7 +9,6 @@ in vec4 ex_Color;
 
 out vec4 out_Color;
 
-uniform vec3 objColor;
 uniform vec3 lightColor;
 uniform int codCol;
 
@@ -40,7 +39,6 @@ void main(void) {
       vec3 emission=vec3(0.0, 0.0, 0.0);
     //vec3 emission=vec3(1.0,0.8,0.4);
     vec3 result = emission + (ambient_term + diffuse_term + specular_term);
-	out_Color = vec4(result, 1.0f);
 
      switch (codCol){
         case 1:

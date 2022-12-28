@@ -235,6 +235,8 @@ void CreateVBO(void)
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 	glEnableVertexAttribArray(1); // atributul 1 = culoare
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)sizeof(Vertices));
+	glEnableVertexAttribArray(2); // atributul 2 = normala
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)(sizeof(Vertices) + sizeof(Colors)));
 }
 void DestroyVBO(void)
 {
@@ -291,14 +293,12 @@ void RenderFunction(void)
 	Obsy = Refy + dist * cos(alpha) * sin(beta);
 	Obsz = Refz + dist * sin(alpha);
 
-	// reperul de vizualizare
+	// reperul de vizualizare + matricea de proiectie
 	glm::vec3 Obs = glm::vec3(Obsx, Obsy, Obsz);   // se schimba pozitia observatorului	
 	glm::vec3 PctRef = glm::vec3(Refx, Refy, Refz); // pozitia punctului de referinta
 	glm::vec3 Vert = glm::vec3(Vx, Vy, Vz); // verticala din planul de vizualizare 
 	view = glm::lookAt(Obs, PctRef, Vert);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-
-	// matricea de proiectie 
 	projection = glm::infinitePerspective(fov, GLfloat(width) / GLfloat(height), znear);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, &projection[0][0]);
 
@@ -313,6 +313,8 @@ void RenderFunction(void)
 	//glPointSize(3.0);
 	//glDrawArrays(GL_POINTS, 0, (NR_PARR + 1) * NR_MERID);
 
+	glUseProgram(ProgramId);
+
 	// desenarea fetelor
 	codCol = 0;
 	glUniform1i(codColLocation, codCol);
@@ -326,10 +328,10 @@ void RenderFunction(void)
 				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+4 * patr) * sizeof(GLushort)));
 	}
 
-	// desenarea muchiilor - meridiane/paralele
-	codCol = 1;
-	glUniform1i(codColLocation, codCol);
-	glLineWidth(2.0);
+	//// desenarea muchiilor - meridiane/paralele
+	//codCol = 1;
+	//glUniform1i(codColLocation, codCol);
+	//glLineWidth(2.0);
 
 	// fiecare meridian separat
 	for (int merid = 0; merid < NR_MERID; merid++)
@@ -354,18 +356,18 @@ void RenderFunction(void)
 			(GLvoid*)(((NR_PARR + 1) * (NR_MERID)+parr * NR_MERID) * sizeof(GLushort)));
 	}
 
-	// Lines - top & bottom
-	codCol = 1;
-	glUniform1i(codColLocation, codCol);
-	for (int merid = 0; merid < NR_MERID; merid++)
-	{
-		glDrawElements(
-			GL_LINES,
-			2 * 2 * NR_MERID,
-			GL_UNSIGNED_SHORT,
-			(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
-		);
-	}
+	//// Lines - top & bottom
+	//codCol = 1;
+	//glUniform1i(codColLocation, codCol);
+	//for (int merid = 0; merid < NR_MERID; merid++)
+	//{
+	//	glDrawElements(
+	//		GL_LINES,
+	//		2 * 2 * NR_MERID,
+	//		GL_UNSIGNED_SHORT,
+	//		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID) * sizeof(GLushort))
+	//	);
+	//}
 
 	// Triangles - top & bottom
 	codCol = 0;
