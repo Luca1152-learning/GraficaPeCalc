@@ -18,9 +18,19 @@ GLuint
 	VaoId,
 	VboId,
 	EboId,
+	ColorBufferId,
 	ProgramId,
+	myMatrixLocation,
+	matrUmbraLocation,
 	viewLocation,
-	projLocation;
+	projLocation,
+	matrRotlLocation,
+	lightColorLocation,
+	lightPosLocation,
+	viewPosLocation,
+	codColLocation;
+
+int codCol;
 
 float const PI = 3.141592f;
 // Elemente pentru reprezentarea suprafetei
@@ -56,6 +66,14 @@ glm::mat4 view, projection;
 
 // Lighting
 GLint lightColorLoc, lightPosLoc, viewPosLoc;
+
+// Umbra
+// matrice utilizate
+glm::mat4 myMatrix, matrRot;
+// sursa de lumina
+float xL = 500.f, yL = 100.f, zL = 400.f;
+// matricea umbrei
+float matrUmbra[4][4];
 
 void processNormalKeys(unsigned char key, int x, int y)
 {
@@ -253,21 +271,25 @@ void DestroyShaders(void)
 {
 	glDeleteProgram(ProgramId);
 }
+
 void Initialize(void)
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); // culoarea de fond a ecranului
-
-	// Creare VBO+shader
+	myMatrix = glm::mat4(1.0f);
+	matrRot = glm::rotate(glm::mat4(1.0f), PI / 8, glm::vec3(0.0, 0.0, 1.0));
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	CreateVBO();
 	CreateShaders();
-
-	// Locatii ptr shader
-	lightColorLoc = glGetUniformLocation(ProgramId, "lightColor");
-	lightPosLoc = glGetUniformLocation(ProgramId, "lightPos");
-	viewPosLoc = glGetUniformLocation(ProgramId, "viewPos");
+	// locatii pentru shader-e
+	myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+	matrUmbraLocation = glGetUniformLocation(ProgramId, "matrUmbra");
 	viewLocation = glGetUniformLocation(ProgramId, "view");
 	projLocation = glGetUniformLocation(ProgramId, "projection");
+	lightColorLocation = glGetUniformLocation(ProgramId, "lightColor");
+	lightPosLocation = glGetUniformLocation(ProgramId, "lightPos");
+	viewPosLocation = glGetUniformLocation(ProgramId, "viewPos");
+	codColLocation = glGetUniformLocation(ProgramId, "codCol");
 }
+
 void reshapeFcn(GLint newWidth, GLint newHeight)
 {
 	glViewport(0, 0, newWidth, newHeight);
@@ -275,22 +297,18 @@ void reshapeFcn(GLint newWidth, GLint newHeight)
 	winHeight = newHeight;
 	width = winWidth / 10, height = winHeight / 10;
 }
+
 void RenderFunction(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-
-	// CreateVBO(); // decomentati acest rand daca este cazul 
-	glBindVertexArray(VaoId);
-	glBindBuffer(GL_ARRAY_BUFFER, VboId);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EboId);
 
 	//pozitia observatorului
 	Obsx = Refx + dist * cos(alpha) * cos(beta);
 	Obsy = Refy + dist * cos(alpha) * sin(beta);
 	Obsz = Refz + dist * sin(alpha);
 
-	// reperul de vizualizare + matricea de proiectie
+	// matrice de vizualizare + proiectie
 	glm::vec3 Obs = glm::vec3(Obsx, Obsy, Obsz);   // se schimba pozitia observatorului	
 	glm::vec3 PctRef = glm::vec3(Refx, Refy, Refz); // pozitia punctului de referinta
 	glm::vec3 Vert = glm::vec3(Vx, Vy, Vz); // verticala din planul de vizualizare 
@@ -299,11 +317,24 @@ void RenderFunction(void)
 	projection = glm::infinitePerspective(fov, GLfloat(width) / GLfloat(height), znear);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, &projection[0][0]);
 
-	// variabile uniforme pentru iluminare
-	glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
-	glUniform3f(lightPosLoc, 0.f, 100.f, 100.f);
-	glUniform3f(viewPosLoc, Obsx, Obsy, Obsz);
+	// matricea pentru umbra
+	float D = -0.5f;
+	matrUmbra[0][0] = zL + D; matrUmbra[0][1] = 0; matrUmbra[0][2] = 0; matrUmbra[0][3] = 0;
+	matrUmbra[1][0] = 0; matrUmbra[1][1] = zL + D; matrUmbra[1][2] = 0; matrUmbra[1][3] = 0;
+	matrUmbra[2][0] = -xL; matrUmbra[2][1] = -yL; matrUmbra[2][2] = D; matrUmbra[2][3] = -1;
+	matrUmbra[3][0] = -D * xL; matrUmbra[3][1] = -D * yL; matrUmbra[3][2] = -D * zL; matrUmbra[3][3] = zL;
+	glUniformMatrix4fv(matrUmbraLocation, 1, GL_FALSE, &matrUmbra[0][0]);
 
+	// Variabile uniforme pentru iluminare
+	glUniform3f(lightColorLocation, 1.0f, 1.0f, 1.0f);
+	glUniform3f(lightPosLocation, xL, yL, zL);
+	glUniform3f(viewPosLocation, Obsx, Obsy, Obsz);
+
+	// Desenare cilindru
+	codCol = 0;
+	glUniform1i(codColLocation, codCol);
+	myMatrix = glm::mat4(1.0f);
+	glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
 	// desenarea fetelor
 	for (int patr = 0; patr < (NR_PARR + 1) * NR_MERID; patr++)
 	{
@@ -314,7 +345,6 @@ void RenderFunction(void)
 				GL_UNSIGNED_SHORT,
 				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+4 * patr) * sizeof(GLushort)));
 	}
-
 	// fiecare meridian separat
 	for (int merid = 0; merid < NR_MERID; merid++)
 	{
@@ -324,7 +354,6 @@ void RenderFunction(void)
 			GL_UNSIGNED_SHORT,
 			(GLvoid*)((merid * NR_PARR + merid) * sizeof(GLushort)));
 	}
-
 	// fiecare cerc paralel separat
 	for (int parr = 1; parr < NR_PARR; parr++)
 	{
@@ -334,7 +363,6 @@ void RenderFunction(void)
 			GL_UNSIGNED_SHORT,
 			(GLvoid*)(((NR_PARR + 1) * (NR_MERID)+parr * NR_MERID) * sizeof(GLushort)));
 	}
-
 	// Triangles - top & bottom
 	glDrawElements(
 		GL_TRIANGLES,
@@ -343,28 +371,31 @@ void RenderFunction(void)
 		(GLvoid*)((2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID) * sizeof(GLushort))
 	);
 
+	// Desenare umbra cilindru
+
 	glutSwapBuffers();
 	glFlush();
 }
+
 void Cleanup(void)
 {
 	DestroyShaders();
 	DestroyVBO();
 }
+
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(winWidth, winHeight);
-	glutCreateWindow("Desenarea si survolarea unei sfere");
+	glutInitWindowSize(1200, 900);
+	glutCreateWindow("Iluminare - umbre");
 	glewInit();
 	Initialize();
-	glutDisplayFunc(RenderFunction);
 	glutIdleFunc(RenderFunction);
+	glutDisplayFunc(RenderFunction);
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);
-	glutReshapeFunc(reshapeFcn);
 	glutCloseFunc(Cleanup);
 	glutMainLoop();
 }
