@@ -15,7 +15,6 @@ using namespace std;
 
 // identificatori 
 GLuint
-	VaoId,
 	VboId,
 	EboId,
 	ColorBufferId,
@@ -29,7 +28,6 @@ GLuint
 	lightPosLocation,
 	viewPosLocation,
 	codColLocation;
-
 int codCol;
 
 float const PI = 3.141592f;
@@ -126,10 +124,10 @@ void CreateVBO(void)
 {
 	// varfurile 
 	// (4) Matricele pentru varfuri, culori, indici
-	glm::vec4 Vertices[(NR_PARR + 1) * NR_MERID + 2];
-	glm::vec3 Colors[(NR_PARR + 1) * NR_MERID + 2];
-	glm::vec3 Normals[(NR_PARR + 1) * NR_MERID + 2];
-	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID];
+	glm::vec4 Vertices[(NR_PARR + 1) * NR_MERID + 6];
+	glm::vec3 Colors[(NR_PARR + 1) * NR_MERID + 6];
+	glm::vec3 Normals[(NR_PARR + 1) * NR_MERID + 6];
+	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID + 6];
 	for (int merid = 0; merid < NR_MERID; merid++)
 	{
 		for (int parr = 0; parr < NR_PARR + 1; parr++)
@@ -233,6 +231,32 @@ void CreateVBO(void)
 		Indices[startIndicesBottom + 3 * i + 2] = nextMeridianIndex;
 	};
 
+	// "Ground"
+	int firstGroundIndex = (NR_PARR + 1) * NR_MERID + 2;
+	// Varfuri
+	Vertices[firstGroundIndex] = glm::vec4(-1500.0f, -1500.0f, -300.0f, 1.0f);
+	Vertices[firstGroundIndex+1] = glm::vec4(1500.0f, -1500.0f, -300.0f, 1.0f);
+	Vertices[firstGroundIndex+2] = glm::vec4(1500.0f, 1500.0f, -300.0f, 1.0f);
+	Vertices[firstGroundIndex+3] = glm::vec4(-1500.0f, 1500.0f, -300.0f, 1.0f);
+	// Normale
+	Normals[firstGroundIndex] = glm::vec3(0.0f, 0.0f, 1.0f);
+	Normals[firstGroundIndex+1] = glm::vec3(0.0f, 0.0f, 1.0f);
+	Normals[firstGroundIndex+2] = glm::vec3(0.0f, 0.0f, 1.0f);
+	Normals[firstGroundIndex+3] = glm::vec3(0.0f, 0.0f, 1.0f);
+	// Culori
+	Colors[firstGroundIndex] = glm::vec4(1.0f, 1.0f, 0.9f, 1.0f);
+	Colors[firstGroundIndex+1] = glm::vec4(1.0f, 1.0f, 0.9f, 1.0f);
+	Colors[firstGroundIndex+2] = glm::vec4(1.0f, 1.0f, 0.9f, 1.0f);
+	Colors[firstGroundIndex+3] = glm::vec4(1.0f, 1.0f, 0.9f, 1.0f);
+	// Indici
+	int firstGroundEboIndex = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID;
+	Indices[firstGroundEboIndex] = firstGroundIndex + 1;
+	Indices[firstGroundEboIndex+1] = firstGroundIndex + 2;
+	Indices[firstGroundEboIndex+2] = firstGroundIndex;
+	Indices[firstGroundEboIndex+3] = firstGroundIndex + 2;
+	Indices[firstGroundEboIndex+4] = firstGroundIndex;
+	Indices[firstGroundEboIndex+5] = firstGroundIndex + 3;
+
 	// generare VAO/buffere
 	glGenBuffers(1, &VboId); // atribute
 	glGenBuffers(1, &EboId); // indici
@@ -329,6 +353,14 @@ void RenderFunction(void)
 	glUniform3f(lightColorLocation, 1.0f, 1.0f, 1.0f);
 	glUniform3f(lightPosLocation, xL, yL, zL);
 	glUniform3f(viewPosLocation, Obsx, Obsy, Obsz);
+
+	// "Ground"
+	int firstGroundEboIndex = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID;
+	codCol = 0;
+	glUniform1i(codColLocation, codCol);
+	myMatrix = glm::mat4(1.0f);
+	glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (GLvoid*)(firstGroundEboIndex * sizeof(GLushort)));
 
 	// Desenare cilindru
 	codCol = 0;
