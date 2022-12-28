@@ -301,7 +301,7 @@ void Initialize(void)
 {
 	myMatrix = glm::mat4(1.0f);
 	matrRot = glm::rotate(glm::mat4(1.0f), PI / 8, glm::vec3(0.0, 0.0, 1.0));
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.80f, 0.96f, 0.98f, 1.0f);
 	CreateVBO();
 	CreateShaders();
 	// locatii pentru shader-e
