@@ -45,13 +45,14 @@ int index, index_aux;
 
 // variabile pentru matricea de vizualizare
 float Refx = 0.0f, Refy = 0.0f, Refz = 0.0f;
-float alpha = 0.0f, beta = 0.0f, dist = 300.0f;
+float alpha = 0.1f, beta = 0.0f, dist = 300.0f;
 float Obsx, Obsy, Obsz;
 float Vx = 0.0f, Vy = 0.0f, Vz = -1.0f;
 float incr_alpha1 = 0.01f, incr_alpha2 = 0.01f;
 
 // variabile pentru matricea de proiectie
 float width = 800, height = 600, znear = 1, fov = 30;
+float zCylinder = 100.0f;
 
 // pentru fereastra de vizualizare 
 GLint winWidth = 1000, winHeight = 600;
@@ -137,7 +138,7 @@ void CreateVBO(void)
 			float v = V_MIN + merid * step_v;
 			float x_vf = radius * cosf(v);
 			float y_vf = radius * sinf(v);
-			float z_vf = u * 40;
+			float z_vf = u * 40 + zCylinder;
 
 			// identificator ptr varf; coordonate + culoare + indice la parcurgerea meridianelor
 			index = merid * (NR_PARR + 1) + parr;
@@ -174,8 +175,8 @@ void CreateVBO(void)
 	// Center - top
 	int centerTopIndex = (NR_PARR + 1) * NR_MERID;
 	float usedMaxU = U_MIN + NR_PARR * step_u;
-	Vertices[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40, 1.0);
-	Normals[centerTopIndex] = glm::vec3(0.0f, 0.0f, usedMaxU * 40);
+	Vertices[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40 + zCylinder, 1.0);
+	Normals[centerTopIndex] = glm::vec3(0.0f, 0.0f, usedMaxU * 40 + zCylinder);
 	Colors[centerTopIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	// Lines - Indices top
 	for (int i = 0; i < NR_MERID; i++)
@@ -204,8 +205,8 @@ void CreateVBO(void)
 	// Center - bottom
 	int centerBottomIndex = centerTopIndex + 1;
 	float usedMinU = U_MIN + 0 * step_u;
-	Vertices[centerBottomIndex] = glm::vec4(0.0f, 0.0f, usedMinU * 40, 1.0);
-	Normals[centerBottomIndex] = glm::vec3(0.0f, 0.0f, usedMinU * 40);
+	Vertices[centerBottomIndex] = glm::vec4(0.0f, 0.0f, usedMinU * 40 + zCylinder, 1.0);
+	Normals[centerBottomIndex] = glm::vec3(0.0f, 0.0f, usedMinU * 40 + zCylinder);
 	Colors[centerBottomIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	// Lines - Indices bottom
 	for (int i = 0; i < NR_MERID; i++)
@@ -234,10 +235,10 @@ void CreateVBO(void)
 	// "Ground"
 	int firstGroundIndex = (NR_PARR + 1) * NR_MERID + 2;
 	// Varfuri
-	Vertices[firstGroundIndex] = glm::vec4(-1500.0f, -1500.0f, -300.0f, 1.0f);
-	Vertices[firstGroundIndex+1] = glm::vec4(1500.0f, -1500.0f, -300.0f, 1.0f);
-	Vertices[firstGroundIndex+2] = glm::vec4(1500.0f, 1500.0f, -300.0f, 1.0f);
-	Vertices[firstGroundIndex+3] = glm::vec4(-1500.0f, 1500.0f, -300.0f, 1.0f);
+	Vertices[firstGroundIndex] = glm::vec4(-1500.0f, -1500.0f, 0.0f, 1.0f);
+	Vertices[firstGroundIndex+1] = glm::vec4(1500.0f, -1500.0f, 0.0f, 1.0f);
+	Vertices[firstGroundIndex+2] = glm::vec4(1500.0f, 1500.0f, 0.0f, 1.0f);
+	Vertices[firstGroundIndex+3] = glm::vec4(-1500.0f, 1500.0f, 0.0f, 1.0f);
 	// Normale
 	Normals[firstGroundIndex] = glm::vec3(0.0f, 0.0f, 1.0f);
 	Normals[firstGroundIndex+1] = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -404,6 +405,19 @@ void RenderFunction(void)
 	);
 
 	// Desenare umbra cilindru
+	codCol = 1;
+	glUniform1i(codColLocation, codCol);
+	myMatrix = glm::mat4(1.0f);
+	glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+	for (int patr = 0; patr < (NR_PARR + 1) * NR_MERID; patr++)
+	{
+		if ((patr + 1) % (NR_PARR + 1) != 0) // nu sunt considerate fetele in care in stanga jos este Polul Nord
+			glDrawElements(
+				GL_QUADS,
+				4,
+				GL_UNSIGNED_SHORT,
+				(GLvoid*)((2 * (NR_PARR + 1) * (NR_MERID)+4 * patr) * sizeof(GLushort)));
+	}
 
 	glutSwapBuffers();
 	glFlush();
