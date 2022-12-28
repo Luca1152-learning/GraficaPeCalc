@@ -27,7 +27,8 @@ GLuint
 	lightColorLocation,
 	lightPosLocation,
 	viewPosLocation,
-	codColLocation;
+	codColLocation,
+	skyColorLocation;
 int codCol;
 
 float const PI = 3.141592f;
@@ -73,6 +74,9 @@ glm::mat4 myMatrix, matrRot;
 float xL = 500.f, yL = 100.f, zL = 400.f;
 // matricea umbrei
 float matrUmbra[4][4];
+
+// Ceata
+const glm::vec3 skyColor = glm::vec3(0.80f, 0.96f, 0.98f);
 
 void processNormalKeys(unsigned char key, int x, int y)
 {
@@ -301,7 +305,7 @@ void Initialize(void)
 {
 	myMatrix = glm::mat4(1.0f);
 	matrRot = glm::rotate(glm::mat4(1.0f), PI / 8, glm::vec3(0.0, 0.0, 1.0));
-	glClearColor(0.80f, 0.96f, 0.98f, 1.0f);
+	glClearColor(skyColor.r, skyColor.g, skyColor.b, 1.0f);
 	CreateVBO();
 	CreateShaders();
 	// locatii pentru shader-e
@@ -313,6 +317,7 @@ void Initialize(void)
 	lightPosLocation = glGetUniformLocation(ProgramId, "lightPos");
 	viewPosLocation = glGetUniformLocation(ProgramId, "viewPos");
 	codColLocation = glGetUniformLocation(ProgramId, "codCol");
+	skyColorLocation = glGetUniformLocation(ProgramId, "skyColor");
 }
 
 void reshapeFcn(GLint newWidth, GLint newHeight)
@@ -354,6 +359,7 @@ void RenderFunction(void)
 	glUniform3f(lightColorLocation, 1.0f, 1.0f, 1.0f);
 	glUniform3f(lightPosLocation, xL, yL, zL);
 	glUniform3f(viewPosLocation, Obsx, Obsy, Obsz);
+	glUniform3f(skyColorLocation, skyColor.r, skyColor.g, skyColor.b);
 
 	// "Ground"
 	int firstGroundEboIndex = 2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID;

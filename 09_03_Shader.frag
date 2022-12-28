@@ -7,11 +7,13 @@ in vec3 inLightPos;
 in vec3 inViewPos;
 in vec3 dir;
 in vec3 ex_Color; 
+in float visibility;
  
 out vec4 out_Color;
  
 uniform vec3 lightColor;
 uniform int codCol; 
+uniform vec3 skyColor;
  
 void main(void)
   {
@@ -44,4 +46,6 @@ void main(void)
         vec3 black = vec3 (0.0, 0.0, 0.0);
 		out_Color = vec4 (black, 1.0);
      }
+
+    out_Color = mix(vec4(skyColor, 1.0f), out_Color, visibility);
   }

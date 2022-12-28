@@ -11,6 +11,7 @@ out vec3 inLightPos;
 out vec3 inViewPos;
 out vec3 ex_Color;
 out vec3 dir;
+out float visibility;
  
 uniform mat4 matrUmbra;
 uniform mat4 myMatrix;
@@ -21,8 +22,15 @@ uniform vec3 viewPos;
 uniform vec3 lightColor;
 uniform int codCol;
 
-void main(void)
-  {
+const float density = 0.004f;
+const float gradient = 1.2f;
+
+void main(void) {
+    vec4 positionRelativeToCam = view * in_Position;
+    float distance = length(positionRelativeToCam.xyz);
+    visibility = exp(-pow((distance * density), gradient));
+    visibility = clamp(visibility, 0.1f, 1.0f);
+
     ex_Color=in_Color;
    	if (codCol==0)
     {
