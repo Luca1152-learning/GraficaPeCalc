@@ -56,6 +56,9 @@ glm::vec3 Obs, PctRef, Vert;
 // matrice utilizate
 glm::mat4 view, projection;
 
+// Lighting
+GLint lightColorLoc, lightPosLoc, viewPosLoc;
+
 void processNormalKeys(unsigned char key, int x, int y)
 {
 	switch (key) {
@@ -109,6 +112,7 @@ void CreateVBO(void)
 	// (4) Matricele pentru varfuri, culori, indici
 	glm::vec4 Vertices[(NR_PARR + 1) * NR_MERID + 2];
 	glm::vec3 Colors[(NR_PARR + 1) * NR_MERID + 2];
+	glm::vec3 Normals[(NR_PARR + 1) * NR_MERID + 2];
 	GLushort Indices[2 * (NR_PARR + 1) * NR_MERID + 4 * (NR_PARR + 1) * NR_MERID + 2 * 2 * NR_MERID + 2 * 3 * NR_MERID];
 	for (int merid = 0; merid < NR_MERID; merid++)
 	{
@@ -125,6 +129,7 @@ void CreateVBO(void)
 			index = merid * (NR_PARR + 1) + parr;
 			Vertices[index] = glm::vec4(x_vf, y_vf, z_vf, 1.0);
 			Colors[index] = glm::vec3(0.1f + sinf(u), 0.1f + cosf(v), 0.1f + -1.5 * sinf(u));
+			Normals[index] = glm::vec3(x_vf, y_vf, z_vf);
 			Indices[index] = index;
 
 			// indice ptr acelasi varf la parcurgerea paralelelor
@@ -156,6 +161,7 @@ void CreateVBO(void)
 	int centerTopIndex = (NR_PARR + 1) * NR_MERID;
 	float usedMaxU = U_MIN + NR_PARR * step_u;
 	Vertices[centerTopIndex] = glm::vec4(0.0f, 0.0f, usedMaxU * 40, 1.0);
+	Normals[centerTopIndex] = glm::vec3(0.0f, 0.0f, usedMaxU * 40);
 	Colors[centerTopIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	// Lines - Indices top
 	for (int i = 0; i < NR_MERID; i++)
@@ -185,6 +191,7 @@ void CreateVBO(void)
 	int centerBottomIndex = centerTopIndex + 1;
 	float usedMinU = U_MIN + 0 * step_u;
 	Vertices[centerBottomIndex] = glm::vec4(0.0f, 0.0f, usedMinU * 40, 1.0);
+	Normals[centerBottomIndex] = glm::vec3(0.0f, 0.0f, usedMinU * 40);
 	Colors[centerBottomIndex] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	// Lines - Indices bottom
 	for (int i = 0; i < NR_MERID; i++)
@@ -217,9 +224,10 @@ void CreateVBO(void)
 	// legare+"incarcare" buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VboId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EboId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices) + sizeof(Colors), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices) + sizeof(Colors) + sizeof(Normals), NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertices), Vertices);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(Vertices), sizeof(Colors), Colors);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(Vertices) + sizeof(Colors), sizeof(Normals), Normals);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
 
 	// atributele; 
@@ -254,8 +262,11 @@ void Initialize(void)
 	CreateShaders();
 
 	// Locatii ptr shader
-	viewLocation = glGetUniformLocation(ProgramId, "viewShader");
-	projLocation = glGetUniformLocation(ProgramId, "projectionShader");
+	lightColorLoc = glGetUniformLocation(ProgramId, "lightColor");
+	lightPosLoc = glGetUniformLocation(ProgramId, "lightPos");
+	viewPosLoc = glGetUniformLocation(ProgramId, "viewPos");
+	viewLocation = glGetUniformLocation(ProgramId, "view");
+	projLocation = glGetUniformLocation(ProgramId, "projection");
 	codColLocation = glGetUniformLocation(ProgramId, "codCol");
 }
 void reshapeFcn(GLint newWidth, GLint newHeight)
@@ -290,6 +301,11 @@ void RenderFunction(void)
 	// matricea de proiectie 
 	projection = glm::infinitePerspective(fov, GLfloat(width) / GLfloat(height), znear);
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, &projection[0][0]);
+
+	// variabile uniforme pentru iluminare
+	glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+	glUniform3f(lightPosLoc, 0.f, 100.f, 100.f);
+	glUniform3f(viewPosLoc, Obsx, Obsy, Obsz);
 
 	// (5) desenarea punctelor/muchiilor/fetelor
 
